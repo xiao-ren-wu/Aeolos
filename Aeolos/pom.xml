@@ -189,6 +189,7 @@
       <version>4.1.0</version>
     </dependency>
 
+    <!--mybatis分页插件-->
     <dependency>
       <groupId>com.github.miemiedev</groupId>
       <artifactId>mybatis-paginator</artifactId>

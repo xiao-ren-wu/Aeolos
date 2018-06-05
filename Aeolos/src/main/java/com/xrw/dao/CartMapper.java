@@ -16,3 +16,4 @@ public interface CartMapper {
 
     int updateByPrimaryKey(Cart record);
 }
+
