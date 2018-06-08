@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aeolos-all.iml" filepath="$PROJECT_DIR$/aeolos-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-common/aeolos-common.iml" filepath="$PROJECT_DIR$/../aeolos-common/aeolos-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal-aop/aeolos-portal-aop.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal-aop/aeolos-portal-aop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal-controller/aeolos-portal-controller.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal-controller/aeolos-portal-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal-dao/aeolos-portal-dao.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal-dao/aeolos-portal-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal-pojo/aeolos-portal-pojo.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal-pojo/aeolos-portal-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aeolos-portal/aeolos-portal-service/aeolos-portal-service.iml" filepath="$PROJECT_DIR$/../aeolos-portal/aeolos-portal-service/aeolos-portal-service.iml" />
+    </modules>
+  </component>
+</project>

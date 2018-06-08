@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="aeolos-portal-controller:war">
+    <output-path>$PROJECT_DIR$/../aeolos-portal/aeolos-portal-controller/target</output-path>
+    <root id="archive" name="aeolos-portal-controller.war">
+      <element id="artifact" artifact-name="aeolos-portal-controller:war exploded" />
+    </root>
+  </artifact>
+</component>
