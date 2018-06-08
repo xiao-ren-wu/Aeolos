@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="aeolos-portal-controller:war exploded">
+    <output-path>$PROJECT_DIR$/aeolos-portal/aeolos-portal-controller/target/aeolos-portal-controller</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="aeolos-portal-controller" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="aeolos-portal-service-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="aeolos-portal-service" />
+          </element>
+          <element id="archive" name="aeolos-portal-dao-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="aeolos-portal-dao" />
+          </element>
+          <element id="archive" name="aeolos-portal-pojo-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="aeolos-portal-pojo" />
+          </element>
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/aeolos-portal/aeolos-portal-controller/target/aeolos-portal-controller/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="aeolos-portal-controller/web/Web" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="aeolos-common" />
+        <module name="aeolos-portal-aop" />
+        <module name="aeolos-portal-controller" />
+        <module name="aeolos-portal-dao" />
+        <module name="aeolos-portal-pojo" />
+        <module name="aeolos-portal-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="aeolos-all" target="1.5" />
+      <module name="aeolos-common" target="1.8" />
+      <module name="aeolos-porta-ldao" target="1.8" />
+      <module name="aeolos-portal" target="1.7" />
+      <module name="aeolos-portal-aop" target="1.8" />
+      <module name="aeolos-portal-controller" target="1.8" />
+      <module name="aeolos-portal-dao" target="1.8" />
+      <module name="aeolos-portal-pojo" target="1.8" />
+      <module name="aeolos-portal-service" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
