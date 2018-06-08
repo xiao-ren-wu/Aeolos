@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aeolos-common/aeolos-common.iml" filepath="$PROJECT_DIR$/aeolos-common/aeolos-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aeolos-parent/aeolos-parent.iml" filepath="$PROJECT_DIR$/aeolos-parent/aeolos-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aeolos-portal/aeolos-portal.iml" filepath="$PROJECT_DIR$/aeolos-portal/aeolos-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aeolos-portal/aeolos-portal-pojo/aeolos-portal-pojo.iml" filepath="$PROJECT_DIR$/aeolos-portal/aeolos-portal-pojo/aeolos-portal-pojo.iml" />
+    </modules>
+  </component>
+</project>
