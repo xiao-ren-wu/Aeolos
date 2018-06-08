@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xrw.portal.dao.ShippingMapper">
+  <resultMap id="BaseResultMap" type="com.xrw.portal.pojo.po.Shipping">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="receiver_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_mobile" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_province" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_city" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_district" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receiver_zip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_province, receiver_city, 
+    receiver_district, receiver_address, receiver_zip, create_time, update_time
+  </sql>
+
+
+
+
+
+
+
+
+
+</mapper>
