@@ -49,6 +49,7 @@
     <javax-servlet.version>3.1.0</javax-servlet.version>
     <jackson.version>2.6.3</jackson.version>
 
+    <jackson-mapper-asl.version>1.9.12</jackson-mapper-asl.version>
     <!--spring 版本-->
     <spring.version>4.3.7.RELEASE</spring.version>
 
@@ -63,6 +64,10 @@
     <jedis.version>2.7.2</jedis.version>
 
     <fastjson.version>1.2.20</fastjson.version>
+
+    <commons-lang3.version>3.5</commons-lang3.version>
+
+    <guava.version>20.0</guava.version>
   </properties>
 
   <dependencyManagement>
@@ -254,6 +259,25 @@
         <groupId>redis.clients</groupId>
         <artifactId>jedis</artifactId>
         <version>${jedis.version}</version>
+      </dependency>
+
+
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>${jackson-mapper-asl.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
       </dependency>
 
     </dependencies>
