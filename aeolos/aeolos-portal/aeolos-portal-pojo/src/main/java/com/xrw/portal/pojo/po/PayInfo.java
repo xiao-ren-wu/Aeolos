@@ -1,8 +1,12 @@
 package com.xrw.portal.pojo.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayInfo {
+/**
+ * @author xiaorenwu
+ */
+public class PayInfo implements Serializable {
     private Integer id;
 
     private Integer userId;

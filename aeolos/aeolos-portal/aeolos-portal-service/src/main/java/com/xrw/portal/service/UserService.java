@@ -23,6 +23,14 @@ public interface UserService {
     ServerResponse<User> login(String username, String password);
 
     /**
+     *使用shiro进行登录
+     * @param username
+     * @param password
+     * @return
+     */
+    ServerResponse<User> loginByShiro(String username,String password);
+
+    /**
      * 用户注册
      * @param user
      * @return
@@ -78,5 +86,10 @@ public interface UserService {
      */
     ServerResponse<User> updateUserMsg(User user);
 
+    /**
+     * 通过用户id获取用户信息
+     * @param id
+     * @return
+     */
     ServerResponse<User> getUserMsgById(Integer id);
 }

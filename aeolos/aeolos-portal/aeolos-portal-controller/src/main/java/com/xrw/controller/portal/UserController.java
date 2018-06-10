@@ -1,10 +1,12 @@
-package com.xrw.controller;
+package com.xrw.controller.portal;
 
 import com.xrw.common.consts.Const;
 import com.xrw.common.enums.ResponseCode;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  * @CreateBy IDEA
@@ -30,22 +31,22 @@ public class UserController {
     @Resource
     UserService userService;
 
+
     /**
      * 用户登录
      * @param username
      * @param password
-     * @param session
      * @return
      */
     @PostMapping("login")
     @ResponseBody
-    public ServerResponse<User> login(String username,String password,HttpSession session){
-        ServerResponse<User> login = userService.login(username, password);
-        if(login.isSuccess()){
-            session.setAttribute(Const.CURRENT_USER,login.getData());
-        }
+    public ServerResponse<User> login(String username, String password){
+        ServerResponse<User> login = userService.loginByShiro(username, password);
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute(Const.CURRENT_USER,login.getData());
         return login;
     }
+
     @PostMapping("/register")
     @ResponseBody
     public ServerResponse<String> register(User user){
@@ -54,7 +55,8 @@ public class UserController {
 
     @GetMapping("/logout")
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session){
+    public ServerResponse<String> logout(){
+        Session session = SecurityUtils.getSubject().getSession();
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
@@ -65,7 +67,8 @@ public class UserController {
     }
     @GetMapping("/get_user_info")
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session){
+    public ServerResponse<User> getUserInfo(){
+        Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user!=null) {
             return ServerResponse.createBySuccess(user);
@@ -90,7 +93,9 @@ public class UserController {
     }
     @PostMapping("/reset_password")
     @ResponseBody
-    public ServerResponse<String> resetPassword(HttpSession session,String passwordNew,String passwordOld){
+    public ServerResponse<String> resetPassword(String passwordNew,String passwordOld){
+        //从shiro中获取session
+        Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user==null){
             return ServerResponse.createByErrorMessage("用户未登录");
@@ -99,7 +104,9 @@ public class UserController {
     }
     @PostMapping("/update_information")
     @ResponseBody
-    public ServerResponse<User> updateInformation(HttpSession session,User updateUser){
+    public ServerResponse<User> updateInformation(User updateUser){
+        //从shiro中获取session
+        Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(null==user){
             return ServerResponse.createBySuccessMessage("用户未登录");
@@ -112,7 +119,9 @@ public class UserController {
     }
     @GetMapping("/get_information")
     @ResponseBody
-    public ServerResponse<User> getInformation(HttpSession session){
+    public ServerResponse<User> getInformation(){
+        //从Shiro中获取session
+        Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user!=null){
             return userService.getUserMsgById(user.getId());

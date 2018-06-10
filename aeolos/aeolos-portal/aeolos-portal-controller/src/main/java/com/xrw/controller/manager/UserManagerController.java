@@ -4,6 +4,8 @@ import com.xrw.common.consts.Const;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,10 +32,11 @@ public class UserManagerController {
 
     @ResponseBody
     @RequestMapping(value = "login",method = RequestMethod.POST)
-    public ServerResponse<User> login(String username, String password, HttpSession session){
-        ServerResponse<User> response = userService.login(username, password);
+    public ServerResponse<User> login(String username, String password){
+        ServerResponse<User> response = userService.loginByShiro(username, password);
         if(response.isSuccess()){
             if(response.getData().getRole()==Const.Role.ROLE_ADMIN){
+                Session session = SecurityUtils.getSubject().getSession();
                 //说明登录的时管理员
                 session.setAttribute(Const.CURRENT_USER,response.getData());
                 return response;

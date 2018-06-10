@@ -19,13 +19,12 @@
     id, username, password, email, phone, question, answer, role, create_time, update_time
   </sql>
   <insert id="addUser" parameterType="map" >
-   insert into aeolos_user (id, username, password,
+   insert into aeolos_user ( username, password,
       email, phone, question,
-      answer, role, create_time,
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      answer, role)
+    values ( #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR},
-      #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}
+      #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER})
   </insert>
   <update id="updateUserPassword" parameterType="map">
     update aeolos_user set password=#{password} ,update_time=now() where username=#{username}
@@ -57,7 +56,7 @@
   <select id="findUserByPassword" resultType="com.xrw.portal.pojo.po.User" parameterType="map">
     select <include refid="Base_Column_List"/>
     from aeolos_user
-    where username=#{username} and password=#{password}
+    where username=#{username}
   </select>
   <select id="findQuestionByUserName" resultType="java.lang.String" parameterType="String">
     select question from aeolos_user where username=#{username}
@@ -78,6 +77,9 @@
     from aeolos_user
     where id=#{id}
   </select>
+    <select id="findPasswordByUsername" parameterType="String" resultType="java.lang.String">
+      select password from aeolos_user where username=#{username}
+    </select>
 
 
 </mapper>

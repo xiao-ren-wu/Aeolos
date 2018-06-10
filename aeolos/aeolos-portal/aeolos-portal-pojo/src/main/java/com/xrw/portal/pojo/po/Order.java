@@ -1,9 +1,13 @@
 package com.xrw.portal.pojo.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Order {
+/**
+ * @author xiaorenwu
+ */
+public class Order implements Serializable {
     private Integer id;
 
     private Long orderNo;

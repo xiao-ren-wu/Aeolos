@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <!--引入配置文件-->
+    <import resource="spring-portal-dao.xml" />
+    <!--<import resource="spring-redis.xml"/>-->
+
+    <!--指定扫描的类路径-->
+    <context:component-scan base-package="com.xrw.controller" />
+
+    <!--过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--登录页-->
+        <property name="loginUrl" value="login.html"/>
+        <!--未通过认证的页面-->
+        <property name="unauthorizedUrl" value="403.html"/>
+        <!--过滤器链-->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--不需要登录认证就可以访问的路径-->
+                /login.html = anon
+                /register.html=anon
+                /testRole = roles["admin"]
+                /testRoles = roles["admin","admin1"]
+                /testPerms=perms["user:delete"]
+                /testPerms1=perms["user:delete","user:update"]
+                /subLogin = anon
+                <!--authc只有经过认证才可以访问相关的路径-->
+                /* = authc
+            </value>
+        </property>
+    </bean>
+
+
+    <!--创建SecurityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="realm"/>
+        <property name="sessionManager" ref="customSessionManager"/>
+    </bean>
+
+    <!--自定义Realm-->
+    <bean id="realm" class="com.xrw.portal.realm.CustomRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher" />
+    </bean>
+
+    <!--加密-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!--使用到的加密算法-->
+        <property name="hashAlgorithmName" value="md5" />
+        <!--加密次数-->
+        <property name="hashIterations" value="1" />
+    </bean>
+
+
+    <!--使用redis存储session-->
+    <bean class="com.xrw.portal.session.RedisSessionDao" id="redisSessionDao"/>
+
+    <!--创建自定义的sessionManager-->
+    <bean class="com.xrw.portal.session.CustomSessionManager" id="customSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+    </bean>
+
+    <!--<bean class="org.apache.shiro.session.mgt.DefaultSessionManager" id="sessionManager">-->
+        <!--<property name="sessionDAO" ref="redisSessionDao"/>-->
+    <!--</bean>-->
+
+</beans>

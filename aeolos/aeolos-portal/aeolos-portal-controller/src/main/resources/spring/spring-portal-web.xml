@@ -2,13 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!--扫描注解-->
     <context:component-scan base-package="com.xrw.controller"/>
     <!--解析器及映射器-->
@@ -31,13 +35,22 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <!--shiro-->
+    <mvc:resources location="/" mapping="/*" />
+
+
+    <!-- 开启AoP -->
+    <aop:config proxy-target-class="true"/>
+
+    <!-- 保证 Shiro内部生命周期 -->
+    <bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 开启Shiro授权生效 -->
+
+    <bean id="" class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor"/>
 
 
 
 
-    <!-- 配置MultipartResolver 用于文件上传 使用spring的CommosMultipartResolver -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-          p:defaultEncoding="UTF-8"
-          p:maxUploadSize="5400000"
-    />
+
 </beans>

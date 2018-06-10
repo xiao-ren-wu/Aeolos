@@ -1,8 +1,13 @@
 package com.xrw.portal.pojo.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Cart {
+
+/**
+ * @author xiaorenwu
+ */
+public class Cart implements Serializable {
     private Integer id;
 
     private Integer userId;

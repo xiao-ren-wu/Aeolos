@@ -7,6 +7,12 @@ import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,7 +41,7 @@ public class UserServiceImpl implements UserService {
         }
         //2.判断密码是否正确
         //TODO
-        User user=userMapper.findUserByPassword(username,password);
+        User user=userMapper.findUserByPassword(username);
         if(user==null){
             return ServerResponse.createByErrorMessage("密码错误！！！");
         }
@@ -45,7 +51,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse register(User user) {
+    public ServerResponse<User> loginByShiro(String username, String password){
+        //1.从数据库中查询是否存在该用户
+        Integer num =userMapper.checkUserName(username);
+        if(num==0){
+            return ServerResponse.createByErrorMessage("用户名不存在！！！");
+        }
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        User user;
+        try {
+            subject.login(token);
+            //从数据库中查询用户信息
+            user=userMapper.findUserByPassword(username);
+            //将查询到的用户密码设置为空
+            user.setPassword(null);
+        } catch (AuthenticationException e) {
+            String msg = e.getMessage();
+            return ServerResponse.createByErrorMessage(msg);
+        }
+
+        return ServerResponse.createBySuccess(user);
+    }
+
+
+    @Override
+    public ServerResponse<String> register(User user) {
         //到数据库中查询用户名是否存在
         Integer num = userMapper.checkUserName(user.getUsername());
         if(num==1){
@@ -59,8 +90,9 @@ public class UserServiceImpl implements UserService {
         //将新用户的信息添加到数据库中
         //1.设置角色为普通用户
         user.setRole(Const.Role.ROLE_CUSTOMER);
-        //2.MD5将用户密码进行加密
-        //TODO
+        //2.将传递过来的明文密码使用MD5加密，加盐
+        String md5Password = new Md5Hash(user.getPassword(), "salt").toString();
+        user.setPassword(md5Password);
         userMapper.addUser(user);
         return ServerResponse.createBySuccessMessage("注册成功");
     }

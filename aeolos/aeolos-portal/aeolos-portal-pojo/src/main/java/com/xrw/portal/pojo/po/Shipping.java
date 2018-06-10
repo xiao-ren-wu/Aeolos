@@ -1,8 +1,12 @@
 package com.xrw.portal.pojo.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Shipping {
+/**
+ * @author xiaorenwu
+ */
+public class Shipping implements Serializable {
     private Integer id;
 
     private Integer userId;

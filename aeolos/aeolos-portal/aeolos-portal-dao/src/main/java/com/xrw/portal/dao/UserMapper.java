@@ -17,10 +17,9 @@ public interface UserMapper {
     /**
      * 根据用户名和用户密码查询用户
      * @param username
-     * @param password
      * @return
      */
-    User findUserByPassword(@Param("username") String username, @Param("password") String password);
+    User findUserByPassword(@Param("username") String username);
 
     /**
      * 用户注册
@@ -80,5 +79,12 @@ public interface UserMapper {
      * @return
      */
     User findUserMsgById(Integer id);
+
+    /**
+     * 通过用户名查询密码
+     * @param username
+     * @return
+     */
+    String findPasswordByUsername(String username);
 
 }

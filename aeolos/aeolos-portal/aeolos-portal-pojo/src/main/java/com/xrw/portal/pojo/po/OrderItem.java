@@ -1,9 +1,13 @@
 package com.xrw.portal.pojo.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderItem {
+/**
+ * @author xiaorenwu
+ */
+public class OrderItem implements Serializable {
     private Integer id;
 
     private Integer userId;

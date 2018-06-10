@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 /**
  * 这样就可以保证json化的时候，如果时null对象，key消失
+ * @author xiaorenwu
  * @param <T>
  */
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
@@ -48,7 +49,7 @@ public class ServerResponse<T> implements Serializable {
     }
 
     @JsonIgnore
-    //使之不在json序列化结果当中
+    /**使之不在json序列化结果当中*/
     public boolean isSuccess(){
         return this.status == ResponseCode.SUCCESS.getCode();
     }
