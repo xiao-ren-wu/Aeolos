@@ -2,7 +2,6 @@ package com.xrw.portal.service.impl;
 
 import com.xrw.portal.dao.ProductMapper;
 import com.xrw.portal.pojo.po.Product;
-import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.ProductService;
 import org.apache.commons.lang3.StringUtils;

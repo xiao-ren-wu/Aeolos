@@ -1,13 +1,9 @@
 package com.xrw.controller.manage;
 
-import com.xrw.common.consts.Const;
-import com.xrw.common.enums.ResponseCode;
+import com.xrw.controller.utils.Check;
 import com.xrw.portal.pojo.po.Category;
-import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +35,13 @@ public class CategoryController {
     @ResponseBody
     public ServerResponse<List<Category>> getCategory(
             @RequestParam(value = "categoryId", defaultValue = "0") Integer parentId) {
+        if(!Check.checkLogin()){
+            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+        }
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
+            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
+        }
         return categoryService.getCategory(parentId);
     }
     @PostMapping("add_category")
@@ -46,13 +49,12 @@ public class CategoryController {
     public ServerResponse<String> addCategory(
             @RequestParam(value = "parentId", defaultValue="0")Integer parentId,String categoryName
     ){
-        //从session中获取当前用户信息，判断该用户是否是管理员身份
-        Session session = SecurityUtils.getSubject().getSession();
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user==null){
+
+        if(Check.checkLogin()){
             return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
         }
-        if(user.getRole()!=Const.Role.ROLE_ADMIN){
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
             return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
         }
         return categoryService.addCategory(parentId,categoryName);
@@ -60,14 +62,12 @@ public class CategoryController {
     @PostMapping("set_category")
     @ResponseBody
     public ServerResponse<String> setCategory(@RequestParam("categoryId")Integer categoryId,@RequestParam("categoryName")String categoryName){
-        //获取session
-        Session session = SecurityUtils.getSubject().getSession();
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user==null){
-            return ServerResponse.createByErrorMessage(ResponseCode.NEED_LOGIN.getDesc());
+        if(Check.checkLogin()){
+            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
         }
-        if(user.getRole()!=Const.Role.ROLE_ADMIN){
-            return ServerResponse.createByErrorMessage("当前用户不是管理员，没有权限登录");
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
+            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
         }
         return categoryService.setCategory(categoryId,categoryName);
     }
@@ -75,6 +75,13 @@ public class CategoryController {
     @ResponseBody
     public ServerResponse<List<Category>> getChildrenParallelCategory(
             @RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
+        if(!Check.checkLogin()){
+            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+        }
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
+            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
+        }
         return categoryService.getChildrenParallelCategory(categoryId);
     }
 

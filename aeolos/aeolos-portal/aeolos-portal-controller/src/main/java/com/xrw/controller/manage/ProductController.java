@@ -1,6 +1,7 @@
 package com.xrw.controller.manage;
 
 import com.xrw.common.consts.Const;
+import com.xrw.controller.utils.Check;
 import com.xrw.portal.pojo.po.Product;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
@@ -33,15 +34,12 @@ public class ProductController {
     @PostMapping(value = "/product/save")
     @ResponseBody
     public ServerResponse<String> save(Product product){
-        //从session中获取当前用户，判断是否是管理员
-        Session session = SecurityUtils.getSubject().getSession();
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user==null){
-            return ServerResponse.createByErrorMessage("没有登录，请先登录");
+        if(!Check.checkLogin()){
+            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
         }
-        Integer role = user.getRole();
-        if(role!=1){
-            return ServerResponse.createByErrorMessage("当前用户不是管理员，没有权限");
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
+            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
         }
         return productService.saveOrUpdate(product);
     }
@@ -52,12 +50,12 @@ public class ProductController {
                                                 @RequestParam(value = "status")Integer status){
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user==null){
-            return ServerResponse.createByErrorMessage("没有登录，请先登录");
+        if(!Check.checkLogin()){
+            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
         }
-        Integer role = user.getRole();
-        if(role!=1){
-            return ServerResponse.createByErrorMessage("当前用户不是管理员，没有权限");
+        //使用shiro进行权限验证
+        if(!Check.checkRole()){
+            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
         }
         return productService.setSaleStatus(productId,status);
     }

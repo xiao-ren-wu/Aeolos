@@ -4,9 +4,6 @@ import com.xrw.portal.dao.CategoryMapper;
 import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
-import org.apache.shiro.util.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,8 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Resource
     private
     CategoryMapper categoryMapper;
-
-    private Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     @Override
     public ServerResponse<List<Category>> getCategory(Integer parentId) {

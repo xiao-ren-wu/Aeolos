@@ -1,18 +1,25 @@
 package com.xrw.portal.realm;
 
+import com.xrw.common.consts.Const;
 import com.xrw.portal.dao.UserMapper;
+import com.xrw.portal.pojo.po.User;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @CreateBy IDEA
@@ -28,11 +35,7 @@ import java.util.List;
 public class CustomRealm extends AuthorizingRealm {
 
     @Resource
-    UserMapper userMapper;
-
-    @Resource
-    RoleMapper roleMapper;
-
+    private UserMapper userMapper;
 
     /**
      * 用来做授权
@@ -41,11 +44,16 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String username = (String)principals.getPrimaryPrincipal();
-        //从数据库中获取用户角色
-        List<String> roles = roleMapper.findRolesByUser(username);
-
-        return null;
+        //从session中获取用户角色
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        Integer role = user.getRole();
+        //将角色数据返回
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        Set<String> set = new HashSet<>();
+        set.add(role.toString());
+        simpleAuthorizationInfo.setRoles(set);
+        return simpleAuthorizationInfo;
     }
 
 
