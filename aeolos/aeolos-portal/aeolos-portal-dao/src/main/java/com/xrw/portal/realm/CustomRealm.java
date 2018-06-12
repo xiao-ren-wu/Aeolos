@@ -1,6 +1,5 @@
 package com.xrw.portal.realm;
 
-import com.xrw.portal.dao.RoleMapper;
 import com.xrw.portal.dao.UserMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -48,6 +47,11 @@ public class CustomRealm extends AuthorizingRealm {
 
         return null;
     }
+
+
+
+
+
 
     /**
      * 用来做认证

@@ -27,6 +27,9 @@
                 <!--不需要登录认证就可以访问的路径-->
                 /login.html = anon
                 /register.html=anon
+                /adminlogin.html=anon
+                <!--为了便于测试，一路绿灯-->
+                /* = anon
                 /testRole = roles["admin"]
                 /testRoles = roles["admin","admin1"]
                 /testPerms=perms["user:delete"]
@@ -34,6 +37,7 @@
                 /subLogin = anon
                 <!--authc只有经过认证才可以访问相关的路径-->
                 /* = authc
+
             </value>
         </property>
     </bean>
@@ -70,5 +74,6 @@
     <!--<bean class="org.apache.shiro.session.mgt.DefaultSessionManager" id="sessionManager">-->
         <!--<property name="sessionDAO" ref="redisSessionDao"/>-->
     <!--</bean>-->
+
 
 </beans>

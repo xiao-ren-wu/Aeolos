@@ -32,17 +32,18 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     @Resource
     UserMapper userMapper;
+
     @Override
     public ServerResponse<User> login(String username, String password) {
         //1.从数据库中查询是否存在该用户
-        Integer num =userMapper.checkUserName(username);
-        if(num==0){
+        Integer num = userMapper.checkUserName(username);
+        if (num == 0) {
             return ServerResponse.createByErrorMessage("用户名不存在！！！");
         }
         //2.判断密码是否正确
         //TODO
-        User user=userMapper.findUserByPassword(username);
-        if(user==null){
+        User user = userMapper.findUserByPassword(username);
+        if (user == null) {
             return ServerResponse.createByErrorMessage("密码错误！！！");
         }
         //3.将密码设置为空
@@ -51,10 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse<User> loginByShiro(String username, String password){
+    public ServerResponse<User> loginByShiro(String username, String password) {
         //1.从数据库中查询是否存在该用户
-        Integer num =userMapper.checkUserName(username);
-        if(num==0){
+        Integer num = userMapper.checkUserName(username);
+        if (num == 0) {
             return ServerResponse.createByErrorMessage("用户名不存在！！！");
         }
         Subject subject = SecurityUtils.getSubject();
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         try {
             subject.login(token);
             //从数据库中查询用户信息
-            user=userMapper.findUserByPassword(username);
+            user = userMapper.findUserByPassword(username);
             //将查询到的用户密码设置为空
             user.setPassword(null);
         } catch (AuthenticationException e) {
@@ -79,12 +80,12 @@ public class UserServiceImpl implements UserService {
     public ServerResponse<String> register(User user) {
         //到数据库中查询用户名是否存在
         Integer num = userMapper.checkUserName(user.getUsername());
-        if(num==1){
+        if (num == 1) {
             return ServerResponse.createByErrorMessage("用户名已存在！！！");
         }
         //验证email是否存在
         Integer checkEmail = userMapper.checkEmail(user.getEmail());
-        if(checkEmail==1){
+        if (checkEmail == 1) {
             return ServerResponse.createByErrorMessage("email已存在");
         }
         //将新用户的信息添加到数据库中
@@ -99,21 +100,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> checkValid(String str, String type) {
-        if(type!=null){
-            if(Const.USERNAME.equals(type)){
+        if (type != null) {
+            if (Const.USERNAME.equals(type)) {
                 Integer checkUserName = userMapper.checkUserName(str);
-                if(checkUserName==1){
+                if (checkUserName == 1) {
                     return ServerResponse.createBySuccess("校验成功！！！");
                 }
                 return ServerResponse.createByErrorMessage("用户已存在");
-            }else{
+            } else {
                 Integer checkEmail = userMapper.checkEmail(str);
-                if(checkEmail==1){
+                if (checkEmail == 1) {
                     return ServerResponse.createBySuccess("校验成功！！！");
                 }
                 return ServerResponse.createByErrorMessage("email已存在");
             }
-        }else{
+        } else {
             return ServerResponse.createByErrorMessage("参数错误");
         }
     }
@@ -121,11 +122,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<String> forgetGetQuestion(String username) {
         Integer checkUserName = userMapper.checkUserName(username);
-        if(checkUserName==0){
+        if (checkUserName == 0) {
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
         String question = userMapper.findQuestionByUserName(username);
-        if(!org.apache.commons.lang3.StringUtils.isNoneBlank(question)){
+        if (!org.apache.commons.lang3.StringUtils.isNoneBlank(question)) {
             return ServerResponse.createBySuccessMessage("该用户未设置问题");
         }
         return ServerResponse.createBySuccess(question);
@@ -134,10 +135,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
         Integer integer = userMapper.checkAnswer(username, question, answer);
-        if(integer>0){
+        if (integer > 0) {
             //答案正确
-            String forgetToker= UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetToker);
+            String forgetToker = UUID.randomUUID().toString();
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username, forgetToker);
             return ServerResponse.createBySuccess(forgetToker);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -145,21 +146,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> forgetResetPasswordToken(String username, String passwordNew, String forgetToken) {
-        if(StringUtils.isBlank(forgetToken)){
+        if (StringUtils.isBlank(forgetToken)) {
             return ServerResponse.createByErrorMessage("参数错误需要传递token");
         }
         ServerResponse<String> valid = this.checkValid(username, Const.USERNAME);
-        if(valid.isSuccess()){
+        if (valid.isSuccess()) {
             //用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-        String key = TokenCache.getKey(TokenCache.TOKEN_PREFIX+ username);
-        if(StringUtils.isBlank(key)||!StringUtils.equals(forgetToken,key)){
+        String key = TokenCache.getKey(TokenCache.TOKEN_PREFIX + username);
+        if (StringUtils.isBlank(key) || !StringUtils.equals(forgetToken, key)) {
             return ServerResponse.createByErrorMessage("token无效或者过期");
         }
         //todo 更新密码
         Integer integer = userMapper.updateUserPassword(username, passwordNew);
-        if(integer>0){
+        if (integer > 0) {
             return ServerResponse.createBySuccessMessage("密码更新成功");
         }
         return ServerResponse.createByErrorMessage("密码更新失败");
@@ -170,13 +171,13 @@ public class UserServiceImpl implements UserService {
         //为了避免横向越权，验证用户的旧密码是否正确
         String username = user.getUsername();
         Integer integer = userMapper.checkPassword(username, passwordOld);
-        if(integer==0){
+        if (integer == 0) {
             return ServerResponse.createByErrorMessage("密码不正确");
         }
         //更新密码
         //todo md5
         Integer integer1 = userMapper.updateUserPassword(username, passWordNew);
-        if(integer1<1){
+        if (integer1 < 1) {
             return ServerResponse.createByErrorMessage("密码更新失败");
         }
         return ServerResponse.createBySuccess("密码更新成功");
@@ -186,12 +187,12 @@ public class UserServiceImpl implements UserService {
     public ServerResponse<User> updateUserMsg(User user) {
         //如果更新email，检查email是否存在，如果别人使用了这个email，则不能更新
         Integer integer = userMapper.checkEmail(user.getEmail());
-        if(integer>0){
+        if (integer > 0) {
             return ServerResponse.createByErrorMessage("email已被别人使用");
         }
         Integer updateNum = userMapper.updateUserMsg(user);
-        if(updateNum>0){
-            return ServerResponse.createBySuccess("更新个人信息成功",user);
+        if (updateNum > 0) {
+            return ServerResponse.createBySuccess("更新个人信息成功", user);
         }
         return ServerResponse.createByErrorMessage("更新失败");
     }
@@ -199,7 +200,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<User> getUserMsgById(Integer id) {
         User user = userMapper.findUserMsgById(id);
-        if(user!=null){
+        if (user != null) {
             return ServerResponse.createBySuccess(user);
         }
         return ServerResponse.createByErrorMessage("未找到该用户");
