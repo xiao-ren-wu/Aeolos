@@ -66,5 +66,5 @@ public interface CategoryMapper {
      * @param categoryId
      * @return
      */
-    Category findCategoryNodeMag(Integer categoryId);
+    Category findCategoryNodeMsg(Integer categoryId);
 }

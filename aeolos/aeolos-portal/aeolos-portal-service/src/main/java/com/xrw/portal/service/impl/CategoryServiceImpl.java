@@ -4,6 +4,7 @@ import com.xrw.portal.dao.CategoryMapper;
 import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ import java.util.Set;
  * @UpdateRemark: TODO
  * @JdkVersion: jdk1.8.0_101
  */
-
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -97,7 +98,7 @@ public class CategoryServiceImpl implements CategoryService {
         return ServerResponse.createBySuccess(categories2);
     }
     private Set<Category> getChildrenParallelCategoryCore(Integer categoryId,Set<Category> set){
-        Category msg = categoryMapper.findCategoryNodeMag(categoryId);
+        Category msg = categoryMapper.findCategoryNodeMsg(categoryId);
         if(msg!=null){
             set.add(msg);
         }

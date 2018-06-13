@@ -1,6 +1,7 @@
 package com.xrw.controller.manage;
 
 import com.xrw.controller.utils.Check;
+import com.xrw.portal.aop.AdminOnly;
 import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
@@ -33,6 +34,7 @@ public class CategoryController {
      */
     @GetMapping("/get_category")
     @ResponseBody
+    @AdminOnly
     public ServerResponse<List<Category>> getCategory(
             @RequestParam(value = "categoryId", defaultValue = "0") Integer parentId) {
         if(!Check.checkLogin()){

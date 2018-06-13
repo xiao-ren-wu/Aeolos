@@ -1,6 +1,8 @@
 package com.xrw.portal.service;
 
+import com.github.pagehelper.PageInfo;
 import com.xrw.portal.pojo.po.Product;
+import com.xrw.portal.pojo.vo.ProductDetailVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 
 /**
@@ -29,4 +31,29 @@ public interface ProductService {
      * @return
      */
     ServerResponse<String> setSaleStatus(Integer productId, Integer status);
+
+    /**
+     * 后台接口，根据productId查找商品详情
+     * @param productId
+     * @return
+     */
+    ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
+
+    /**
+     * 后台展示商品列表
+     * @param pageNum 第几页
+     * @param pageSize 每页展示商品数量
+     * @return
+     */
+    ServerResponse<PageInfo> getProductList(int pageNum, int pageSize);
+
+    /**
+     * 动态排序
+     * @param productName
+     * @param productId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
 }

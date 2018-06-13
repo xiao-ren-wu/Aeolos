@@ -38,7 +38,7 @@ public class UserController {
      * @param password 密码
      * @return 需求
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     @ResponseBody
     public ServerResponse<User> login(String username, String password){
         ServerResponse<User> login = userService.loginByShiro(username, password);
@@ -58,7 +58,7 @@ public class UserController {
     public ServerResponse<String> logout(){
         Session session = SecurityUtils.getSubject().getSession();
         session.removeAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccess();
+        return ServerResponse.createBySuccess("退出成功");
     }
     @GetMapping("/check_valid")
     @ResponseBody
@@ -86,7 +86,7 @@ public class UserController {
     public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer){
         return userService.checkAnswer(username,question,answer);
     }
-    @PostMapping("/forget_reset_password")
+    @GetMapping("/forget_reset_password")
     @ResponseBody
     public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
         return userService.forgetResetPasswordToken(username,passwordNew,forgetToken);

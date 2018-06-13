@@ -1,13 +1,26 @@
 package com.xrw.portal.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.xrw.common.enums.ResponseCode;
+import com.xrw.common.utils.DateTimeUtil;
+import com.xrw.common.utils.PropertiesUtil;
+import com.xrw.portal.dao.CategoryMapper;
 import com.xrw.portal.dao.ProductMapper;
+import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.po.Product;
+import com.xrw.portal.pojo.vo.ProductDetailVo;
+import com.xrw.portal.pojo.vo.ProductListVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @CreateBy IDEA
@@ -24,6 +37,12 @@ import javax.annotation.Resource;
 public class ProductServiceImpl implements ProductService {
     @Resource
     private ProductMapper productMapper;
+
+    @Resource
+    private CategoryMapper categoryMapper;
+
+
+
     @Override
     public ServerResponse<String> saveOrUpdate(Product product){
         if(product==null){
@@ -68,4 +87,71 @@ public class ProductServiceImpl implements ProductService {
         }
         return ServerResponse.createByErrorMessage("更新失败");
     }
+
+    @Override
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+        if(productId == null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if(product == null){
+            return ServerResponse.createByErrorMessage("产品已下架或者删除");
+        }
+        ProductDetailVo productDetailVo = new ProductDetailVo();
+        //属性拷贝
+        BeanUtils.copyProperties(product,productDetailVo);
+        productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
+        //查找父级节点
+        Category category = categoryMapper.findCategoryNodeMsg(product.getCategoryId());
+        if(category==null){
+            productDetailVo.setParentCategoryId(0);
+        }else{
+            productDetailVo.setParentCategoryId(category.getParentId());
+        }
+        productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
+        productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
+
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize) {
+        /*
+         * 分页插件使用步骤：
+         *  1.startPage--start
+         *  2.填充自己的SQL
+         *  3.pageHelper收尾
+         */
+        PageHelper.startPage(pageNum,pageSize);
+        List<Product> list =  productMapper.selectList();
+        List<ProductListVo> productListVoArrayList = new ArrayList<>();
+        for(Product temp:list){
+            ProductListVo listVo = new ProductListVo();
+            BeanUtils.copyProperties(temp,listVo);
+            productListVoArrayList.add(listVo);
+        }
+        PageInfo pageResult=new PageInfo(productListVoArrayList);
+        pageResult.setList(productListVoArrayList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        if(StringUtils.isNotBlank(productName)){
+            productName=new StringBuilder().append("%").append(productName).append("%").toString();
+        }
+        List<Product> productList=productMapper.selectByNameAndProductId( productName,productId);
+        List<ProductListVo> productListVoArrayList = new ArrayList<>();
+        for(Product temp:productList){
+            ProductListVo listVo = new ProductListVo();
+            BeanUtils.copyProperties(temp,listVo);
+            productListVoArrayList.add(listVo);
+        }
+        PageInfo pageResult=new PageInfo(productListVoArrayList);
+        pageResult.setList(productListVoArrayList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+
 }

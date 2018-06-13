@@ -1,17 +1,24 @@
 package com.xrw.controller.manage;
 
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.xrw.common.consts.Const;
-import com.xrw.controller.utils.Check;
+import com.xrw.common.enums.ResponseCode;
+import com.xrw.common.utils.PropertiesUtil;
 import com.xrw.portal.pojo.po.Product;
 import com.xrw.portal.pojo.po.User;
+import com.xrw.portal.pojo.vo.ProductDetailVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
+import com.xrw.portal.service.IFileService;
 import com.xrw.portal.service.ProductService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @CreateBy IDEA
@@ -31,16 +38,12 @@ public class ProductController {
     @Resource
     private ProductService productService;
 
+    @Resource
+    private IFileService iFileService;
+
     @PostMapping(value = "/product/save")
     @ResponseBody
     public ServerResponse<String> save(Product product){
-        if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return productService.saveOrUpdate(product);
     }
 
@@ -48,15 +51,46 @@ public class ProductController {
     @ResponseBody
     public ServerResponse<String> setSaleStatus(@RequestParam(value = "productId")Integer productId,
                                                 @RequestParam(value = "status")Integer status){
-        Session session = SecurityUtils.getSubject().getSession();
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return productService.setSaleStatus(productId,status);
     }
+    @GetMapping(value = "product/detail")
+    @ResponseBody
+    public ServerResponse<ProductDetailVo> manageGetProductDetail(Integer productId){
+        return productService.getProductDetail(productId);
+    }
+
+    @GetMapping("/list")
+    @ResponseBody
+    public ServerResponse<PageInfo> getList(@RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+                                            @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize){
+        return productService.getProductList(pageNum,pageSize);
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public ServerResponse<PageInfo> productSearch(String productName,Integer productId,
+                                                  @RequestParam(value = "pageNum")Integer pageNum,
+                                                  @RequestParam(value = "pageSize")Integer pageSize){
+        return productService.searchProduct(productName,productId,pageNum,pageSize);
+    }
+
+    /**
+     * 文件上传模块
+     * @param file
+     * @param request
+     * @return
+     */
+    @RequestMapping("upload.do")
+    @ResponseBody
+    public ServerResponse upload(HttpSession session, @RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request){
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String targetFileName = iFileService.upload(file,path);
+        String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;
+
+        Map fileMap = Maps.newHashMap();
+        fileMap.put("uri",targetFileName);
+        fileMap.put("url",url);
+        return ServerResponse.createBySuccess(fileMap);
+    }
+
 }

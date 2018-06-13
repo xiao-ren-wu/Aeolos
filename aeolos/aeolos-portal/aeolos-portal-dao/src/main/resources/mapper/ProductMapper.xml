@@ -69,5 +69,28 @@
   <select id="checkProduct" resultType="java.lang.Integer" parameterType="Integer">
     select count(1) from aeolos_product where id=#{id}
   </select>
+    <select id="selectByPrimaryKey" resultType="com.xrw.portal.pojo.po.Product" parameterType="Integer">
+      SELECT <include refid="Base_Column_List"/>
+      FROM aeolos_product
+      WHERE id=#{productId}
+    </select>
+    <select id="selectList" resultType="com.xrw.portal.pojo.po.Product">
+      select <include refid="Base_Column_List"/>
+      from aeolos_product
+      order BY id asc
+    </select>
+  <select id="selectByNameAndProductId" resultType="com.xrw.portal.pojo.po.Product" parameterType="map">
+    select <include refid="Base_Column_List"/>
+    from aeolos_product
+    <where>
+      <if test="productName!=null " >
+        and name like #{productName}
+      </if>
+      <if test="productId !=null">
+        and id = #{productId}
+      </if>
+    </where>
+
+  </select>
 
 </mapper>

@@ -56,7 +56,7 @@
     from aeolos_category
     where name=#{categoryName} and id=#{categoryId}
   </select>
-  <select id="findCategoryNodeMag" resultType="com.xrw.portal.pojo.po.Category" parameterType="Integer">
+  <select id="findCategoryNodeMsg" resultType="com.xrw.portal.pojo.po.Category" parameterType="Integer">
     SELECT <include refid="Base_Column_List"/>
     FROM aeolos_category
     WHERE id = #{categoryId}

@@ -1,7 +1,7 @@
 package com.xrw.portal.service.impl;
 
-import com.xrw.common.cache.TokenCache;
 import com.xrw.common.consts.Const;
+import com.xrw.common.enums.CacheCode;
 import com.xrw.portal.dao.UserMapper;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
@@ -68,8 +68,7 @@ public class UserServiceImpl implements UserService {
             //将查询到的用户密码设置为空
             user.setPassword(null);
         } catch (AuthenticationException e) {
-            String msg = e.getMessage();
-            return ServerResponse.createByErrorMessage(msg);
+            return ServerResponse.createByErrorMessage("密码错误");
         }
 
         return ServerResponse.createBySuccess(user);
@@ -138,7 +137,11 @@ public class UserServiceImpl implements UserService {
         if (integer > 0) {
             //答案正确
             String forgetToker = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username, forgetToker);
+            //获取session
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setAttribute(CacheCode.TOKEN_FREFIX.getMsg()+username,forgetToker);
+            //超时时间为10分钟
+            session.setTimeout(600000);
             return ServerResponse.createBySuccess(forgetToker);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
@@ -150,16 +153,17 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorMessage("参数错误需要传递token");
         }
         ServerResponse<String> valid = this.checkValid(username, Const.USERNAME);
-        if (valid.isSuccess()) {
+        if (!valid.isSuccess()) {
             //用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-        String key = TokenCache.getKey(TokenCache.TOKEN_PREFIX + username);
+        Session session = SecurityUtils.getSubject().getSession();
+        String key = (String)session.getAttribute(CacheCode.TOKEN_FREFIX.getMsg() + username);
         if (StringUtils.isBlank(key) || !StringUtils.equals(forgetToken, key)) {
             return ServerResponse.createByErrorMessage("token无效或者过期");
         }
-        //todo 更新密码
-        Integer integer = userMapper.updateUserPassword(username, passwordNew);
+        String md5Password = new Md5Hash(passwordNew, "salt").toString();
+        Integer integer = userMapper.updateUserPassword(username, md5Password);
         if (integer > 0) {
             return ServerResponse.createBySuccessMessage("密码更新成功");
         }
@@ -167,7 +171,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse<String> resetPassword(String passwordOld, String passWordNew, User user) {
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
         //为了避免横向越权，验证用户的旧密码是否正确
         String username = user.getUsername();
         Integer integer = userMapper.checkPassword(username, passwordOld);
@@ -175,8 +179,8 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorMessage("密码不正确");
         }
         //更新密码
-        //todo md5
-        Integer integer1 = userMapper.updateUserPassword(username, passWordNew);
+        String md5Password = new Md5Hash(passwordNew, "salt").toString();
+        Integer integer1 = userMapper.updateUserPassword(username, md5Password);
         if (integer1 < 1) {
             return ServerResponse.createByErrorMessage("密码更新失败");
         }

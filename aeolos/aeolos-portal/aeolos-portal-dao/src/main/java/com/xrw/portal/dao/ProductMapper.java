@@ -1,12 +1,20 @@
 package com.xrw.portal.dao;
 
 import com.xrw.portal.pojo.po.Product;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author xiaorenwu
  */
 public interface ProductMapper {
 
+    /**
+     * 后台查询所有商品
+     * @return 商品列表
+     */
+    List<Product> selectList();
 
     /**
      * 添加商品
@@ -28,4 +36,21 @@ public interface ProductMapper {
      * @return
      */
     Integer checkProduct(Integer id);
+
+    /**
+     * 根据商品ID查询商品详情
+     * @param productId
+     * @return
+     */
+    Product selectByPrimaryKey( Integer productId);
+
+    /**
+     * 动态搜索
+     * @param productName
+     * @param productId
+     * @return
+     */
+    List<Product> selectByNameAndProductId(
+            @Param("productName")String productName,
+            @Param("productId")Integer productId);
 }
