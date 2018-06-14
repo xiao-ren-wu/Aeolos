@@ -41,7 +41,7 @@ public interface CategoryService {
     ServerResponse<String> setCategory(Integer categoryId, String categoryName);
 
     /**
-     * 通过父类id查询所欲子节点
+     * 通过父类id查询所有子节点
      * @param parentId
      * @return
      */

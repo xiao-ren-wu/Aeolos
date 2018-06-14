@@ -2,11 +2,8 @@ package com.xrw.controller.manage;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
-import com.xrw.common.consts.Const;
-import com.xrw.common.enums.ResponseCode;
 import com.xrw.common.utils.PropertiesUtil;
 import com.xrw.portal.pojo.po.Product;
-import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ProductDetailVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.IFileService;
@@ -17,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -82,7 +78,7 @@ public class ProductController {
      */
     @RequestMapping("upload.do")
     @ResponseBody
-    public ServerResponse upload(HttpSession session, @RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request){
+    public ServerResponse upload(@RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request){
         String path = request.getSession().getServletContext().getRealPath("upload");
         String targetFileName = iFileService.upload(file,path);
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;

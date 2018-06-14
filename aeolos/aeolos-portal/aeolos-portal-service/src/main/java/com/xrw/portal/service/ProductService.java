@@ -18,6 +18,17 @@ import com.xrw.portal.pojo.vo.ServerResponse;
 
 public interface ProductService {
     /**
+     * 用户模块，商品列表展示
+     * @param keyword 关键字
+     * @param categoryId 商品类别id
+     * @param pageNum 当前页
+     * @param pageSize 每一页的容量
+     * @param orderBy 排序方式
+     * @return 商品列表，分页展示
+     */
+    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy);
+
+    /**
      * 更新或者添加新产品
      * @param product 产品对象
      * @return
@@ -56,4 +67,11 @@ public interface ProductService {
      * @return
      */
     ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
+
+    /**
+     * 普通用户商品详情，和后台的不同是如果商品status=1不展示
+     * @param productId
+     * @return
+     */
+    ServerResponse<ProductDetailVo> getUserProductDetail(Integer productId);
 }

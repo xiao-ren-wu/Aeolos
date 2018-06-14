@@ -1,5 +1,7 @@
 package com.xrw.common.consts;
 
+import com.google.common.collect.Sets;
+
 import java.util.Set;
 
 /**
@@ -149,5 +151,9 @@ public class Const {
             throw new RuntimeException("么有找到对应的枚举");
         }
 
+    }
+
+    public interface ProductListOrderBy {
+        Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc","price_asc");
     }
 }
