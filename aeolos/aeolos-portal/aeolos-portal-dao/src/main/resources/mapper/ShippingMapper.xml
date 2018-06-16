@@ -21,13 +21,62 @@
     id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_province, receiver_city, 
     receiver_district, receiver_address, receiver_zip, create_time, update_time
   </sql>
-
-
-
-
-
-
-
+  <insert id="insert" parameterType="com.xrw.portal.pojo.po.Shipping" useGeneratedKeys="true" keyProperty="id">
+    insert into aeolos_shipping (id, user_id, receiver_name,
+      receiver_phone, receiver_mobile, receiver_province,
+      receiver_city, receiver_district, receiver_address,
+      receiver_zip
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR},
+      #{receiverPhone,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR},
+      #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR},
+      #{receiverZip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByShipping" parameterType="com.xrw.portal.pojo.po.Shipping">
+      update aeolos_shipping
+      <set>
+        <if test="receiverName != null">
+          receiver_name = #{receiverName,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverPhone != null">
+          receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverMobile != null">
+          receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverProvince != null">
+          receiver_province = #{receiverProvince,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverCity != null">
+          receiver_city = #{receiverCity,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverDistrict != null">
+          receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverAddress != null">
+          receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverZip != null">
+          receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER} and user_id=#{userId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteAddr" parameterType="map">
+    delete from aeolos_shipping
+    where id=#{shippingId} and user_id=#{userId}
+  </delete>
+  <select id="selectByShippingIdUserId" resultType="com.xrw.portal.pojo.po.Shipping">
+    select <include refid="Base_Column_List"/>
+    from aeolos_shipping
+    where user_id=#{userId} and shippingId=#{shippingId}
+  </select>
+  <select id="list" resultType="com.xrw.portal.pojo.po.Shipping">
+    select <include refid="Base_Column_List"/>
+    from aeolos_shipping
+    where user_id=#{userId}
+  </select>
 
 
 </mapper>
