@@ -33,10 +33,12 @@ public class FileServiceImpl implements IFileService {
         String uploadFileName=UUID.randomUUID().toString()+"."+fileExtensionName;
         log.info("开始时文件上传，上传文件的文件名称：{}，上传的路径是：{}，新文件名称：{}",fileName,path,uploadFileName);
 
+        System.out.println("那就这样吧");
         File fileDir = new File(path);
         if(!fileDir.exists()){
-            fileDir.setWritable(true);
             fileDir.mkdirs();
+            fileDir.setWritable(true);
+            System.out.println("创建文件夹");
         }
         File targetFile = new File(path,uploadFileName);
 

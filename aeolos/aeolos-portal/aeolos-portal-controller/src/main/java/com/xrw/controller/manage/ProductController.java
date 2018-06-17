@@ -73,14 +73,16 @@ public class ProductController {
     /**
      * 文件上传模块
      * @param file
-     * @param request
      * @return
      */
-    @RequestMapping("upload.do")
+    @PostMapping("upload")
     @ResponseBody
-    public ServerResponse upload(@RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request){
-        String path = request.getSession().getServletContext().getRealPath("upload");
+    public ServerResponse upload(@RequestParam(value = "upload_file",required = false) MultipartFile file){
+        System.out.println("执行了么");
+        String path ="upload";
+        System.out.println("你好啊");
         String targetFileName = iFileService.upload(file,path);
+        System.out.println("fasdf");
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;
 
         Map fileMap = Maps.newHashMap();
