@@ -20,10 +20,11 @@
     id, user_id, order_no, product_id, product_name, product_image, current_unit_price, 
     quantity, total_price, create_time, update_time
   </sql>
-
-
-
-
+    <select id="selectByUserIdOrderNo" resultType="com.xrw.portal.pojo.po.OrderItem" parameterType="map">
+      select <include refid="Base_Column_List"/>
+      from aeolos_order_item
+      where user_id=#{userId} and order_no=#{orderNo}
+    </select>
 
 
 </mapper>

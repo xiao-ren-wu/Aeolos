@@ -17,5 +17,11 @@
     id, user_id, order_no, pay_platform, platform_number, platform_status, create_time, 
     update_time
   </sql>
+    <insert id="insert" parameterType="com.xrw.portal.pojo.po.PayInfo">
+      insert into aeolos_pay_info (id, user_id, order_no,
+      pay_platform, platform_number, platform_status)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT},
+      #{payPlatform,jdbcType=INTEGER}, #{platformNumber,jdbcType=VARCHAR}, #{platformStatus,jdbcType=VARCHAR})
+    </insert>
 
 </mapper>

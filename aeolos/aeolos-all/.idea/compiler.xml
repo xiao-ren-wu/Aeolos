@@ -19,7 +19,7 @@
       <module name="aeolos-common" target="1.8" />
       <module name="aeolos-portal" target="1.7" />
       <module name="aeolos-portal-aop" target="1.8" />
-      <module name="aeolos-portal-controller" target="1.8" />
+      <module name="aeolos-portal-controller" target="1.7" />
       <module name="aeolos-portal-dao" target="1.8" />
       <module name="aeolos-portal-pojo" target="1.8" />
       <module name="aeolos-portal-service" target="1.8" />

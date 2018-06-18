@@ -78,9 +78,7 @@ public class ProductController {
     @PostMapping("upload")
     @ResponseBody
     public ServerResponse upload(@RequestParam(value = "upload_file",required = false) MultipartFile file){
-        System.out.println("执行了么");
         String path ="upload";
-        System.out.println("你好啊");
         String targetFileName = iFileService.upload(file,path);
         System.out.println("fasdf");
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;

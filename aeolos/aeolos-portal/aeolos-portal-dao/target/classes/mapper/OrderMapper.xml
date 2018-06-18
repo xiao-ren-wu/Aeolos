@@ -23,14 +23,33 @@
     id, order_no, user_id, shipping_id, payment, payment_type, postage, status, payment_time, 
     send_time, end_time, close_time, create_time, update_time
   </sql>
-
-
-
-
-
-
-
-
+  <update id="updateByPrimaryKey" parameterType="com.xrw.portal.pojo.po.Order">
+    update aeolos_order
+    set order_no = #{orderNo,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=INTEGER},
+      shipping_id = #{shippingId,jdbcType=INTEGER},
+      payment = #{payment,jdbcType=DECIMAL},
+      payment_type = #{paymentType,jdbcType=INTEGER},
+      postage = #{postage,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      close_time = #{closeTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUserIdAndOrderNo" resultType="com.xrw.portal.pojo.po.Order" parameterType="map">
+      select <include refid="Base_Column_List"/>
+      from aeolos_order
+      where user_id=#{userId} and order_no=#{orderNo}
+    </select>
+  <select id="selectByOrderNo" resultType="com.xrw.portal.pojo.po.Order" parameterType="Long">
+    select <include refid="Base_Column_List"/>
+    from aeolos_order
+    where order_no=#{orderNo}
+  </select>
 
 
 </mapper>
