@@ -32,7 +32,11 @@
       delete from aeolos_cart
       where user_id=#{userId} and id=#{productId}
     </delete>
-    <select id="selectCartByUserIdProductId" resultType="com.xrw.portal.pojo.po.Cart" parameterType="map">
+  <delete id="deleteByPrimaryKey" parameterType="Integer">
+    delete from aeolos_cart
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectCartByUserIdProductId" resultType="com.xrw.portal.pojo.po.Cart" parameterType="map">
       select <include refid="Base_Column_List"/>
       from aeolos_cart
       where user_id=#{userId} and productId = #{productId}
@@ -50,8 +54,13 @@
     from aeolos_cart
     where user_id=#{userId}
   </select>
+    <select id="selectCheckCartByUserId" parameterType="Integer" resultType="com.xrw.portal.pojo.po.Cart">
+      select <include refid="Base_Column_List"/>
+      from aeolos_cart
+      where user_id=#{userId} and checked = 1
+    </select>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.xrw.portal.pojo.po.Cart">
+    <update id="updateByPrimaryKeySelective" parameterType="com.xrw.portal.pojo.po.Cart">
     update aeolos_cart
     <set>
       <if test="userId != null">

@@ -5,7 +5,10 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.demo.trade.config.Configs;
 import com.xrw.common.consts.Const;
 import com.xrw.common.enums.ResponseCode;
+import com.xrw.portal.pojo.po.Order;
 import com.xrw.portal.pojo.po.User;
+import com.xrw.portal.pojo.vo.OrderProductVo;
+import com.xrw.portal.pojo.vo.OrderVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,6 +42,112 @@ import java.util.Map;
 public class OrderController {
     @Resource
     private OrderService orderService;
+
+    /**
+     * 创建订单
+     * @param shippingId
+     * @return
+     */
+    @RequestMapping("/create")
+    @ResponseBody
+    public ServerResponse<OrderVo> create(Integer shippingId){
+        //判断用户是否登录
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return orderService.create(user.getId(),shippingId);
+    }
+
+    /**
+     * 获取购物车中的产品
+     * @param orderNo 订单id
+     */
+    @ResponseBody
+    @RequestMapping("/cancel")
+    public ServerResponse<String> cancel(Long orderNo){
+        //判断用户是否登录
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return orderService.cancel(user.getId(),orderNo);
+    }
+
+    /**
+     * 获取购物车中已经选中的商品详情
+     */
+    @ResponseBody
+    @RequestMapping("/get_order_cart_product")
+    public ServerResponse<OrderProductVo> getOrderCartProduct(){
+        //判断用户是否登录
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return orderService.getOrderCartProduct(user.getId());
+    }
+
+    /**
+     * 获取订单详情
+     */
+    @ResponseBody
+    @RequestMapping("/detail")
+    public ServerResponse<OrderVo> detail(Long orderNo){
+        //判断用户是否登录
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return orderService.detail(user.getId(),orderNo);
+    }
+
+    @ResponseBody
+    @RequestMapping("/list")
+    public ServerResponse<List<OrderVo>> list(Long orderNo){
+        //判断用户是否登录
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return orderService.list(user.getId());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @ResponseBody
     @GetMapping("/pay")

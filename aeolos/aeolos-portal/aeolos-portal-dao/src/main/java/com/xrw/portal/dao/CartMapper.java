@@ -79,4 +79,18 @@ public interface CartMapper {
      * @return
      */
     Integer selectCartProductCount(Integer userId);
+
+    /**
+     * 从购物车中获取已经被勾选的商品
+     * @param userId
+     * @return
+     */
+    List<Cart> selectCheckCartByUserId(Integer userId);
+
+    /**
+     * 通过主键进行删除
+     * @param id
+     * @return
+     */
+    Integer deleteByPrimaryKey(Integer id);
 }

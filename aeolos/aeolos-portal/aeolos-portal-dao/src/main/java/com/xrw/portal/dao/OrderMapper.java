@@ -4,6 +4,8 @@ package com.xrw.portal.dao;
 import com.xrw.portal.pojo.po.Order;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @author xiaorenwu
  */
@@ -30,4 +32,18 @@ public interface OrderMapper {
      * @return
      */
     Integer updateByPrimaryKey(Order order);
+
+    /**
+     * 插入订单
+     * @param order
+     * @return
+     */
+    Integer insert(Order order);
+
+    /**
+     * 通过用户ID查询用户订单
+     * @param userId
+     * @return
+     */
+    List<Order> selectByUserId(Integer userId);
 }

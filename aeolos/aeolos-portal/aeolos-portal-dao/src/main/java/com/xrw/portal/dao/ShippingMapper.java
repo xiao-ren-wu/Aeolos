@@ -49,4 +49,11 @@ public interface ShippingMapper {
      * @return
      */
     List<Shipping> list(Integer userId);
+
+    /**
+     * 通过主键进行查询收货地址
+     * @param shippingId
+     * @return
+     */
+    Shipping selectByPrimaryKey(Integer shippingId);
 }
