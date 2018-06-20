@@ -41,7 +41,7 @@ public class ShippingController {
      */
     @ResponseBody
     @PostMapping("/add")
-    public ServerResponse<Map>  add(Shipping shipping){
+    public ServerResponse<Map> add(Shipping shipping){
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user==null){
@@ -50,6 +50,12 @@ public class ShippingController {
 
         return shippingService.add(user.getId(),shipping);
     }
+
+    /**
+     * 删除收货地址
+     * @param shippingId
+     * @return
+     */
     @ResponseBody
     @GetMapping("/del")
     public ServerResponse<String> del(Integer shippingId){

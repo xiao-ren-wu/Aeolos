@@ -70,7 +70,7 @@
   <select id="selectByShippingIdUserId" resultType="com.xrw.portal.pojo.po.Shipping">
     select <include refid="Base_Column_List"/>
     from aeolos_shipping
-    where user_id=#{userId} and shippingId=#{shippingId}
+    where user_id=#{userId} and id=#{shippingId}
   </select>
   <select id="list" resultType="com.xrw.portal.pojo.po.Shipping">
     select <include refid="Base_Column_List"/>

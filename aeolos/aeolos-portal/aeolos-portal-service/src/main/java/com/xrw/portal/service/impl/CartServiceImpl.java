@@ -75,6 +75,8 @@ public class CartServiceImpl implements CartService {
         }
         Cart cart = new Cart();
         cart.setQuantity(count);
+        cart.setProductId(productId);
+        cart.setUserId(userId);
         cartMapper.updateByPrimaryKeySelective(cart);
         return this.list(userId);
 
@@ -130,10 +132,17 @@ public class CartServiceImpl implements CartService {
                 CartProductVo cartProductVo = new CartProductVo();
                 //属性拷贝
                 BeanUtils.copyProperties(temp,cartProductVo);
+                cartProductVo.setProductChecked(temp.getChecked());
                 //通过商品id查询商品信息
                 Product product = productMapper.selectByPrimaryKey(temp.getProductId());
                 if (product!=null){
-                    BeanUtils.copyProperties(product,cartProductVo);
+                    //属性拷贝
+                    cartProductVo.setProductName(product.getName());
+                    cartProductVo.setProductSubtitle(product.getSubtitle());
+                    cartProductVo.setProductMainImage(product.getMainImage());
+                    cartProductVo.setProductPrice(product.getPrice());
+                    cartProductVo.setProductStatus(product.getStatus());
+                    cartProductVo.setProductStock(product.getStock());
                     //判断库存
                     int buyLimitCount=0;
                     if(product.getStock()>=temp.getQuantity()){

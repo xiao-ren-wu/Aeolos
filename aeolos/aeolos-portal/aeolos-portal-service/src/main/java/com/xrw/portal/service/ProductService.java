@@ -3,7 +3,10 @@ package com.xrw.portal.service;
 import com.github.pagehelper.PageInfo;
 import com.xrw.portal.pojo.po.Product;
 import com.xrw.portal.pojo.vo.ProductDetailVo;
+import com.xrw.portal.pojo.vo.ProductListVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
+
+import java.util.List;
 
 /**
  * @CreateBy IDEA
@@ -21,12 +24,9 @@ public interface ProductService {
      * 用户模块，商品列表展示
      * @param keyword 关键字
      * @param categoryId 商品类别id
-     * @param pageNum 当前页
-     * @param pageSize 每一页的容量
-     * @param orderBy 排序方式
      * @return 商品列表，分页展示
      */
-    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy);
+    ServerResponse<List<ProductListVo>> getProductByKeywordCategory(String keyword, Integer categoryId);
 
     /**
      * 更新或者添加新产品

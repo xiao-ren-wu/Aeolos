@@ -30,12 +30,16 @@
   </insert>
     <delete id="deleteByUserIdProductIds" parameterType="map">
       delete from aeolos_cart
-      where user_id=#{userId} and id=#{productId}
+      where user_id=#{userId} and product_id=#{productId}
     </delete>
-    <select id="selectCartByUserIdProductId" resultType="com.xrw.portal.pojo.po.Cart" parameterType="map">
+  <delete id="deleteByPrimaryKey" parameterType="Integer">
+    delete from aeolos_cart
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectCartByUserIdProductId" resultType="com.xrw.portal.pojo.po.Cart" parameterType="map">
       select <include refid="Base_Column_List"/>
       from aeolos_cart
-      where user_id=#{userId} and productId = #{productId}
+      where user_id=#{userId} and product_id = #{productId}
     </select>
   <select id="selectCartByUserId" resultType="com.xrw.portal.pojo.po.Cart" parameterType="Integer">
     select <include refid="Base_Column_List"/>
@@ -59,9 +63,6 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.xrw.portal.pojo.po.Cart">
     update aeolos_cart
     <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=INTEGER},
       </if>
@@ -78,7 +79,7 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where product_id = #{productId} and user_id=#{userId}
   </update>
   <update id="changeAllChecked" parameterType="map">
     update aeolos_cart

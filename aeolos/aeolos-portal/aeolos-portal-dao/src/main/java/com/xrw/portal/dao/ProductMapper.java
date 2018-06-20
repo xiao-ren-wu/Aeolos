@@ -56,6 +56,7 @@ public interface ProductMapper {
 
 
     /**
+     * 根据商品和商品类别id查询商品列表
      * @param productName 商品名称，模糊
      * @param categoryIdList 商品类别列表
      * @return 商品列表

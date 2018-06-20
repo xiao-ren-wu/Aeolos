@@ -45,11 +45,11 @@ public class ProductServiceImpl implements ProductService {
     private CategoryMapper categoryMapper;
 
     @Resource
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
 
     @Override
-    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy) {
+    public ServerResponse<List<ProductListVo>> getProductByKeywordCategory(String keyword, Integer categoryId) {
         if(StringUtils.isBlank(keyword)&&categoryId==null){
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.ILLEGAL_ARGUMENT.getCode(),
@@ -60,11 +60,10 @@ public class ProductServiceImpl implements ProductService {
             Category category = categoryMapper.findCategoryNodeMsg(categoryId);
             if(category==null&&StringUtils.isBlank(keyword)){
                 //没有该分类，并且还没有关键字，返回一个空的结果集，不报错
-                PageHelper.startPage(pageNum,pageSize);
                 List<ProductListVo> productListVos=new ArrayList<>();
-                PageInfo pageInfo = new PageInfo(productListVos);
-                return ServerResponse.createBySuccess(pageInfo);
+                return ServerResponse.createBySuccess(productListVos);
             }
+            //根据类别Id递归找到所属的子节点
             List<Category> list = categoryService.getChildrenParallelCategory(categoryId).getData();
             for(Category temp:list){
                 categoryIdList.add(temp.getId());
@@ -73,15 +72,7 @@ public class ProductServiceImpl implements ProductService {
         if(StringUtils.isNotBlank(keyword)){
             keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
         }
-
-        PageHelper.startPage(pageNum,pageSize);
-        //排序处理
-        if(StringUtils.isNotBlank(orderBy)){
-            if(Const.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)){
-                String[] orderByArray = orderBy.split("_");
-                PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
-            }
-        }
+        //给前端包装数据
         List<Product> productList = productMapper.selectByNameAndCategoryIds(StringUtils.isBlank(keyword)?null:keyword,categoryIdList.size()==0?null:categoryIdList);
 
         List<ProductListVo> productListVoList = Lists.newArrayList();
@@ -91,9 +82,7 @@ public class ProductServiceImpl implements ProductService {
             productListVoList.add(productListVo);
         }
 
-        PageInfo pageInfo = new PageInfo(productList);
-        pageInfo.setList(productListVoList);
-        return ServerResponse.createBySuccess(pageInfo);
+        return ServerResponse.createBySuccess(productListVoList);
     }
 
     @Override

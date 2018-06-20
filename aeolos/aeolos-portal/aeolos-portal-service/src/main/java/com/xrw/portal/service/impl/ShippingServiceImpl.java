@@ -54,6 +54,12 @@ public class ShippingServiceImpl implements ShippingService {
         return ServerResponse.createByErrorMessage("删除地址失败");
     }
 
+    /**
+     * 更新收货地址
+     * @param userId
+     * @param shipping
+     * @return
+     */
     @Override
     public ServerResponse<String> update(Integer userId, Shipping shipping) {
         if(shipping==null){

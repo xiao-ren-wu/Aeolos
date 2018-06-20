@@ -23,7 +23,17 @@
     id, order_no, user_id, shipping_id, payment, payment_type, postage, status, payment_time, 
     send_time, end_time, close_time, create_time, update_time
   </sql>
-  <update id="updateByPrimaryKey" parameterType="com.xrw.portal.pojo.po.Order">
+    <insert id="insert" parameterType="com.xrw.portal.pojo.po.Order">
+      insert into aeolos_order (id, order_no, user_id,
+      shipping_id, payment, payment_type,
+      postage, status, payment_time,
+      send_time, end_time, close_time)
+    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT}, #{userId,jdbcType=INTEGER},
+      #{shippingId,jdbcType=INTEGER}, #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=INTEGER},
+      #{postage,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP},
+      #{sendTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.xrw.portal.pojo.po.Order">
     update aeolos_order
     set order_no = #{orderNo,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=INTEGER},
@@ -50,6 +60,11 @@
     from aeolos_order
     where order_no=#{orderNo}
   </select>
+    <select id="selectByUserId" resultType="com.xrw.portal.pojo.po.Order">
+      select <include refid="Base_Column_List"/>
+      from aeolos_order
+      where user_id=#{userId}
+    </select>
 
 
 </mapper>

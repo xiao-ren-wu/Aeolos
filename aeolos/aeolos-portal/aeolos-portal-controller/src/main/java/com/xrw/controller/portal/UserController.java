@@ -44,6 +44,8 @@ public class UserController {
         ServerResponse<User> login = userService.loginByShiro(username, password);
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute(Const.CURRENT_USER,login.getData());
+        User attribute = (User)session.getAttribute(Const.CURRENT_USER);
+        System.out.println(attribute+"---------------------------------------------------------------------------------------");
         return login;
     }
 

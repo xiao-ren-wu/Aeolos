@@ -149,7 +149,8 @@ public class OrderServiceImpl implements OrderService {
                 .setUndiscountableAmount(undiscountableAmount).setSellerId(sellerId).setBody(body)
                 .setOperatorId(operatorId).setStoreId(storeId).setExtendParams(extendParams)
                 .setTimeoutExpress(timeoutExpress)
-                .setNotifyUrl(PropertiesUtil.getProperty("alipay.callback.url"))//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
+                //支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
+                .setNotifyUrl(PropertiesUtil.getProperty("alipay.callback.url"))
                 .setGoodsDetailList(goodsDetailList);
 
         /** 一定要在创建AlipayTradeService之前调用Configs.init()设置默认参数
@@ -177,7 +178,6 @@ public class OrderServiceImpl implements OrderService {
                     folder.setWritable(true);
                     folder.mkdirs();
                 }
-
                 // 需要修改为运行机器上的路径
                 //细节细节细节
                 String qrPath = String.format(path + "/qr-%s.png", response.getOutTradeNo());
@@ -190,15 +190,14 @@ public class OrderServiceImpl implements OrderService {
                 } catch (IOException e) {
                     log.error("上传二维码异常", e);
                 }
-
 //                // 需要修改为运行机器上的路径
 //                String filePath = String.format("/Users/sudo/Desktop/qr-%s.png",
 //                        response.getOutTradeNo());
                 log.info("filePath:" + qrPath);
                 //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
 
-                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix");
-
+                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFile.getName();
+                resultMap.put("qrUrl",qrUrl);
                 return ServerResponse.createBySuccess(resultMap);
 
             case FAILED:
@@ -214,10 +213,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse callback(Map params) {
-        Long orderNo =(Long)params.get("out_trade_no");
-        String tradeNo=(String) params.get("trade_no");
-        String tradeStatus =(String)params.get("trade_status");
+    public ServerResponse callback(Map<String,String> params) {
+
+        Long orderNo = Long.parseLong(params.get("out_trade_no"));
+        String tradeNo = params.get("trade_no");
+        String tradeStatus = params.get("trade_status");
         Order order = orderMapper.selectByOrderNo(orderNo);
         if(order==null){
             return ServerResponse.createByErrorMessage("非Aeolos的订单，回调忽略");
@@ -226,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
             return ServerResponse.createBySuccess("支付宝重复调用");
         }
         if(Const.AlipayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)){
-            order.setPaymentTime(DateTimeUtil.strToDate((String) params.get("gmt_payment")));
+            order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
             order.setStatus(Const.OrderStatusEnum.PAID.getCode());
             orderMapper.updateByPrimaryKey(order);
         }
@@ -535,37 +535,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 简单打印应答
      */
     private void dumpResponse(AlipayResponse response) {
         if (response != null) {
+            System.out.println();
             log.info(String.format("code:%s, msg:%s", response.getCode(), response.getMsg()));
             if (StringUtils.isNotEmpty(response.getSubCode())) {
                 log.info(String.format("subCode:%s, subMsg:%s", response.getSubCode(),

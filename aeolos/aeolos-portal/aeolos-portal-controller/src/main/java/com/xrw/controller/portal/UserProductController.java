@@ -1,7 +1,7 @@
 package com.xrw.controller.portal;
 
-import com.github.pagehelper.PageInfo;
 import com.xrw.portal.pojo.vo.ProductDetailVo;
+import com.xrw.portal.pojo.vo.ProductListVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @CreateBy IDEA
@@ -44,19 +45,13 @@ public class UserProductController {
      * 商品展示
      * @param keyword 关键字
      * @param categoryId 商品类别id
-     * @param pageNum 第几页
-     * @param pageSize 每页容量
-     * @param orderBy 排列顺序
      * @return 商品列表，分页展示
      */
-    @RequestMapping("list.do")
+    @GetMapping("list")
     @ResponseBody
-    public ServerResponse<PageInfo> list(@RequestParam(value = "keyword",required = false)String keyword,
-                                         @RequestParam(value = "categoryId",required = false)Integer categoryId,
-                                         @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
-                                         @RequestParam(value = "pageSize",defaultValue = "10") int pageSize,
-                                         @RequestParam(value = "orderBy",defaultValue = "") String orderBy){
-        return productService.getProductByKeywordCategory(keyword,categoryId,pageNum,pageSize,orderBy);
+    public ServerResponse<List<ProductListVo>> list(@RequestParam(value = "keyword",required = false)String keyword,
+                                                    @RequestParam(value = "categoryId",required = false)Integer categoryId){
+        return productService.getProductByKeywordCategory(keyword,categoryId);
     }
 
 }

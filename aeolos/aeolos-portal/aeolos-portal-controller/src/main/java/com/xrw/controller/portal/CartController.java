@@ -73,7 +73,7 @@ public class CartController {
      * @return
      */
     @ResponseBody
-    @PostMapping("deleteProduct")
+    @PostMapping("delete_product")
     public ServerResponse<CartVo> deleteProduct(String productIds){
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
@@ -98,6 +98,10 @@ public class CartController {
         return cartService.list(user.getId());
     }
 
+    /**
+     * 勾选全部购物车中商品
+     * @return
+     */
     @ResponseBody
     @GetMapping("select_all")
     public ServerResponse<CartVo> selectAll(){
@@ -118,6 +122,12 @@ public class CartController {
         }
         return cartService.selectOrUnSelect(user.getId(),Const.Cart.UN_CHECKED);
     }
+
+    /**
+     * 勾选购物者中某个商品
+     * @param productId
+     * @return
+     */
     @RequestMapping("select")
     @ResponseBody
     public ServerResponse<CartVo> select(Integer productId){
@@ -129,6 +139,11 @@ public class CartController {
         return cartService.selectOrUnSelect(user.getId(),productId,Const.Cart.CHECKED);
     }
 
+    /**
+     * 取消选中购物车中的某个商品
+     * @param productId
+     * @return
+     */
     @RequestMapping("un_select")
     @ResponseBody
     public ServerResponse<CartVo> unSelect(Integer productId){
@@ -140,6 +155,10 @@ public class CartController {
         return cartService.selectOrUnSelect(user.getId(),productId,Const.Cart.UN_CHECKED);
     }
 
+    /**
+     * 查询购物车中的商品数量
+     * @return
+     */
     @RequestMapping("get_cart_product_count")
     @ResponseBody
     public ServerResponse<Integer> getCartProductCount(){

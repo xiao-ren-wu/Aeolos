@@ -33,7 +33,7 @@ public interface OrderService {
      * @param requestParams
      * @return
      */
-    ServerResponse callback(Map requestParams);
+    ServerResponse callback(Map<String,String> requestParams);
 
     /**
      * 产看订单状态
