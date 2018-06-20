@@ -41,4 +41,11 @@ public interface OrderItemMapper {
      * @return
      */
     List<OrderItem> getByOrderNo(Long orderNo);
+
+    /**
+     * 添加订单详情
+     * @param orderItem
+     * @return
+     */
+    Integer insert(OrderItem orderItem);
 }

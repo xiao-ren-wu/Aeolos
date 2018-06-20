@@ -39,7 +39,17 @@
         )
       </foreach>
        </insert>
-    <select id="selectByUserIdOrderNo" resultType="com.xrw.portal.pojo.po.OrderItem" parameterType="map">
+  <insert id="insert" parameterType="com.xrw.portal.pojo.po.OrderItem">
+    insert into aeolos_order_item (id, user_id, order_no,
+      product_id, product_name, product_image,
+      current_unit_price, quantity, total_price,
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT},
+      #{productId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{productImage,jdbcType=VARCHAR},
+      #{currentUnitPrice,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{totalPrice,jdbcType=DECIMAL},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectByUserIdOrderNo" resultType="com.xrw.portal.pojo.po.OrderItem" parameterType="map">
       select <include refid="Base_Column_List"/>
       from aeolos_order_item
       where user_id=#{userId} and order_no=#{orderNo}
@@ -47,7 +57,7 @@
     <select id="getByOrderNoUserId" resultType="com.xrw.portal.pojo.po.OrderItem" parameterType="map">
       select <include refid="Base_Column_List"/>
       from aeolos_order_item
-      where user_id=#{userId} and orderNo=#{orderNo}
+      where user_id=#{userId} and order_no=#{orderNo}
     </select>
   <select id="getByOrderNo" parameterType="Long" resultType="com.xrw.portal.pojo.po.OrderItem">
     select <include refid="Base_Column_List"/>

@@ -39,6 +39,7 @@ import com.alipay.demo.trade.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -191,10 +192,7 @@ public class OrderServiceImpl implements OrderService {
                     log.error("上传二维码异常", e);
                 }
 //                // 需要修改为运行机器上的路径
-//                String filePath = String.format("/Users/sudo/Desktop/qr-%s.png",
-//                        response.getOutTradeNo());
                 log.info("filePath:" + qrPath);
-                //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
 
                 String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFile.getName();
                 resultMap.put("qrUrl",qrUrl);
@@ -256,6 +254,7 @@ public class OrderServiceImpl implements OrderService {
         return ServerResponse.createByError();
     }
 
+
     @Override
     public ServerResponse<OrderVo> create(Integer userId,Integer shippingId) {
         //获取已被勾选的购物车
@@ -279,9 +278,11 @@ public class OrderServiceImpl implements OrderService {
         for(OrderItem orderItem:orderItemList){
             orderItem.setOrderNo(order.getOrderNo());
         }
-        //mybatis批量插入
-        orderItemMapper.batchInsert(orderItemList);
-        //减少库存
+        System.out.println("开始批量插入");
+        for(OrderItem orderItem:orderItemList){
+            orderItemMapper.insert(orderItem);
+        }
+        System.out.println("完成批量插入");
         this.reduceProductStock(orderItemList);
         //清空购物车
         this.cleanCart(carts);
@@ -374,7 +375,7 @@ public class OrderServiceImpl implements OrderService {
         orderVo.setOrderNo(order.getOrderNo());
         orderVo.setPayment(order.getPayment());
         orderVo.setPaymentType(order.getPaymentType());
-        orderVo.setPaymentTypeDesc(Const.PaymentTypeEnum.codeOf(order.getPaymentType()).getValue());
+        //orderVo.setPaymentTypeDesc(Const.PaymentTypeEnum.codeOf(order.getPaymentType()).getValue());
 
         orderVo.setPostage(order.getPostage());
         orderVo.setStatus(order.getStatus());
@@ -447,6 +448,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderItemList 订单详情列表
      */
     private void reduceProductStock(List<OrderItem> orderItemList){
+        System.out.println("减少库存===================================================");
         for(OrderItem orderItem:orderItemList){
             Integer productId = orderItem.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);

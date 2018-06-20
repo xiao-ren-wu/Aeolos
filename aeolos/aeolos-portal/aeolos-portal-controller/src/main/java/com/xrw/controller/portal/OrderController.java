@@ -6,7 +6,6 @@ import com.alipay.demo.trade.config.Configs;
 import com.google.common.collect.Maps;
 import com.xrw.common.consts.Const;
 import com.xrw.common.enums.ResponseCode;
-import com.xrw.portal.pojo.po.Order;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.OrderProductVo;
 import com.xrw.portal.pojo.vo.OrderVo;
@@ -46,8 +45,7 @@ public class OrderController {
 
     /**
      * 创建订单
-     * @param shippingId
-     * @return
+     * @param shippingId 收货地址id
      */
     @RequestMapping("/create")
     @ResponseBody
@@ -62,11 +60,11 @@ public class OrderController {
     }
 
     /**
-     * 获取购物车中的产品
-     * @param orderNo 订单id
+     * 取消订单
+     * @param orderNo
      */
     @ResponseBody
-    @RequestMapping("/cancel")
+    @GetMapping("/cancel")
     public ServerResponse<String> cancel(Long orderNo){
         //判断用户是否登录
         Session session = SecurityUtils.getSubject().getSession();
@@ -107,9 +105,12 @@ public class OrderController {
         return orderService.detail(user.getId(),orderNo);
     }
 
+    /**
+     * 用户获取订单列表
+     */
     @ResponseBody
     @RequestMapping("/list")
-    public ServerResponse<List<OrderVo>> list(Long orderNo){
+    public ServerResponse<List<OrderVo>> list(){
         //判断用户是否登录
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
@@ -119,37 +120,10 @@ public class OrderController {
         return orderService.list(user.getId());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 支付
+     * @param orderNo 订单号
+     */
     @ResponseBody
     @GetMapping("/pay")
     public ServerResponse pay(Long orderNo){
@@ -162,6 +136,11 @@ public class OrderController {
         String path ="upload";
         return orderService.pay(orderNo,user.getId(),path);
     }
+
+    /**
+     * 支付宝回调
+     * @param request 获取回调信息
+     */
     @ResponseBody
     @PostMapping("/alipay_callback")
     public Object alipayCallback(HttpServletRequest request){
@@ -206,6 +185,11 @@ public class OrderController {
         }
         return Const.AlipayCallback.RESPONSE_FAILED;
     }
+
+    /**
+     * 查看订单支付状态
+     * @param orderNo 订单号
+     */
     @ResponseBody
     @RequestMapping("query_order_pay_status")
     public ServerResponse<Boolean> queryOrderPayStatus(Long orderNo){
