@@ -3,6 +3,7 @@ package com.xrw.portal.pojo.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @CreateBy IDEA
@@ -21,7 +22,7 @@ public class ProductDetailVo {
     private String name;
     private String subtitle;
     private String mainImage;
-    private String subImages;
+    private List<String> subImagesList;
     private String detail;
     private BigDecimal price;
     private Integer stock;

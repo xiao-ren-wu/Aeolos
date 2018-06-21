@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -207,6 +208,11 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailVo productDetailVo = new ProductDetailVo();
         //属性拷贝
         BeanUtils.copyProperties(product,productDetailVo);
+        ArrayList<String> subImageList = new ArrayList<>();
+        String subImage=product.getSubImages();
+        String[] sub = subImage.split(",");
+        boolean b = Collections.addAll(subImageList, sub);
+        productDetailVo.setSubImagesList(subImageList);
         productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         //查找父级节点
         Category category = categoryMapper.findCategoryNodeMsg(product.getCategoryId());
