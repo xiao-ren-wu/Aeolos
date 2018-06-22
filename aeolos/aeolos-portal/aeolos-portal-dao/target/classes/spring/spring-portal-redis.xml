@@ -10,8 +10,8 @@
 
     <bean class="redis.clients.jedis.JedisPool" id="jedisPool">
         <constructor-arg ref="jedisPoolConfig"/>
-        <constructor-arg value="${redis.ip}"/>
-        <constructor-arg value="${redis.port}"/>
+        <constructor-arg index="1" value="${redis.host}" type="java.lang.String" />
+        <constructor-arg index="2" value="${redis.port}" type="int"/>
     </bean>
     <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig"/>
     <context:component-scan base-package="com.xrw.portal"/>
