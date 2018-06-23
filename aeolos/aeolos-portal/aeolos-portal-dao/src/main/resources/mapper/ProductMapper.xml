@@ -92,20 +92,16 @@
     </where>
 
   </select>
-    <select id="selectByNameAndCategoryIds" resultType="com.xrw.portal.pojo.po.Product" parameterType="map">
+    <select id="selectByName" resultType="com.xrw.portal.pojo.po.Product" parameterType="map">
       select
       <include refid="Base_Column_List"/>
       from aeolos_product
-      where status =1
-      <if test="productName != null">
-        and name like #{productName}
-      </if>
-      <if test="categoryIdList != null">
-        or category_id in
-        <foreach item="item" index="index" open="(" separator="," close=")" collection="categoryIdList">
-          #{item}
-        </foreach>
-      </if>
+      where status =1 and name like #{productName}
     </select>
+  <select id="selectByCategoryId" resultType="com.xrw.portal.pojo.po.Product">
+    select <include refid="Base_Column_List"/>
+    from aeolos_product
+    where category_id=#{categoryId}
+  </select>
 
 </mapper>

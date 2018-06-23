@@ -74,8 +74,14 @@ public class ProductServiceImpl implements ProductService {
             keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
         }
         //给前端包装数据
-        List<Product> productList = productMapper.selectByNameAndCategoryIds(StringUtils.isBlank(keyword)?null:keyword,categoryIdList.size()==0?null:categoryIdList);
-
+        List<Product> productList1 = productMapper.selectByName(StringUtils.isBlank(keyword)?null:keyword);
+        List<Product> productList =new ArrayList<>(productList1);
+        for(Integer categoryIdTemp:categoryIdList){
+            Product product=productMapper.selectByCategoryId(categoryIdTemp);
+            if(product!=null){
+                productList.add(product);
+            }
+        }
         List<ProductListVo> productListVoList = Lists.newArrayList();
         for(Product product : productList){
             ProductListVo productListVo = new ProductListVo();
@@ -208,11 +214,20 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailVo productDetailVo = new ProductDetailVo();
         //属性拷贝
         BeanUtils.copyProperties(product,productDetailVo);
+        //添加商品图片
         ArrayList<String> subImageList = new ArrayList<>();
         String subImage=product.getSubImages();
         String[] sub = subImage.split(",");
-        boolean b = Collections.addAll(subImageList, sub);
+        Collections.addAll(subImageList, sub);
         productDetailVo.setSubImagesList(subImageList);
+
+        //添加商品详情图片
+        ArrayList<String> detailList = new ArrayList<>();
+        String detail = product.getDetail();
+        String[] details = detail.split(",");
+        Collections.addAll(detailList,details);
+        productDetailVo.setDetailList(detailList);
+
         productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         //查找父级节点
         Category category = categoryMapper.findCategoryNodeMsg(product.getCategoryId());

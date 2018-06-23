@@ -18,6 +18,8 @@ public class Category implements Serializable {
 
     private Integer sortOrder;
 
+    private String categoryImg;
+
     private Date createTime;
 
     private Date updateTime;
@@ -30,6 +32,14 @@ public class Category implements Serializable {
         this.sortOrder = sortOrder;
         this.createTime = createTime;
         this.updateTime = updateTime;
+    }
+
+    public String getCategoryImg() {
+        return categoryImg;
+    }
+
+    public void setCategoryImg(String categoryImg) {
+        this.categoryImg = categoryImg;
     }
 
     public Category() {
@@ -109,4 +119,6 @@ public class Category implements Serializable {
 
         return Objects.hash(getId());
     }
+
+
 }

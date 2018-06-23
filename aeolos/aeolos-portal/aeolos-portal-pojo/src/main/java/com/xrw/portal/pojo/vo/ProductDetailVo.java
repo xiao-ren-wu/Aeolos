@@ -23,7 +23,7 @@ public class ProductDetailVo {
     private String subtitle;
     private String mainImage;
     private List<String> subImagesList;
-    private String detail;
+    private List<String> detailList;
     private BigDecimal price;
     private Integer stock;
     private Integer status;
