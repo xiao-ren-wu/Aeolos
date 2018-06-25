@@ -21,6 +21,7 @@ import java.util.List;
  * @UpdateRemark: TODO
  * @JdkVersion: jdk1.8.0_101
  */
+@CrossOrigin
 @RequestMapping("/manage")
 @Controller
 public class CategoryController {

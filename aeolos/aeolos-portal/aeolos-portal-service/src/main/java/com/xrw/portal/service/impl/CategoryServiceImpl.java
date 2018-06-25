@@ -1,10 +1,13 @@
 package com.xrw.portal.service.impl;
 
+import com.xrw.common.utils.PropertiesUtil;
 import com.xrw.portal.dao.CategoryMapper;
 import com.xrw.portal.pojo.po.Category;
+import com.xrw.portal.pojo.vo.CategoryShowVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -79,8 +82,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         category.setId(categoryId);
         category.setName(categoryName);
-        Integer upodateCount = categoryMapper.setCategory(category);
-        if(upodateCount>0){
+        Integer updateCount = categoryMapper.setCategory(category);
+        if(updateCount>0){
             return ServerResponse.createBySuccess("更新品类名称成功");
         }
         return ServerResponse.createByErrorMessage("更新品类失败");
@@ -97,6 +100,37 @@ public class CategoryServiceImpl implements CategoryService {
         ArrayList<Category> categories2 = new ArrayList<>(categories1);
         return ServerResponse.createBySuccess(categories2);
     }
+
+    @Override
+    public ServerResponse<List<CategoryShowVo>> treeShowCategory(Integer categoryId) {
+        if(categoryId==null){
+            return ServerResponse.createByErrorMessage("参数传递错误");
+        }
+        CategoryShowVo categoryShowVo = new CategoryShowVo();
+        treeShowCategoryCore(categoryId,categoryShowVo);
+        List<CategoryShowVo> categoryShowVoList = categoryShowVo.getCategoryShowVoList();
+        return ServerResponse.createBySuccess(categoryShowVoList);
+    }
+
+    private void treeShowCategoryCore(Integer categoryId,CategoryShowVo categoryShowVo) {
+        //根据parentId查找子类别
+        List<Category> category = categoryMapper.getCategory(categoryId);
+        if(category==null){
+            return ;
+        }
+        //属性拷贝，类型转换
+        for (Category categoryTemp : category) {
+            CategoryShowVo categoryShowVoTemp = new CategoryShowVo();
+            BeanUtils.copyProperties(categoryTemp,categoryShowVoTemp);
+            //将没有拷贝好的属性赋值
+            categoryShowVoTemp.setCategoryImgUrl(PropertiesUtil.getProperty("ftp.server.http.prefix")+categoryTemp.getCategoryImg());
+            List<CategoryShowVo> categoryShowVoList = categoryShowVo.getCategoryShowVoList();
+            categoryShowVoList.add(categoryShowVoTemp);
+            //将当前节点的id作为父类id查找他的子节点
+            this.treeShowCategoryCore(categoryShowVoTemp.getId(),categoryShowVoTemp);
+        }
+    }
+
     private Set<Category> getChildrenParallelCategoryCore(Integer categoryId,Set<Category> set){
         Category msg = categoryMapper.findCategoryNodeMsg(categoryId);
         if(msg!=null){

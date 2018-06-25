@@ -14,7 +14,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, parent_id, name, status, sort_order, create_time, update_time
+    id, parent_id, name, status, sort_order, create_time, update_time,category_img
   </sql>
   <insert id="addCategory" parameterType="map" >
     INSERT INTO aeolos_category

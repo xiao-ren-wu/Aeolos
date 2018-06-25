@@ -26,7 +26,7 @@ import java.util.Random;
  * @UpdateRemark: TODO
  * @JdkVersion: jdk1.8.0_101
  */
-
+@CrossOrigin
 @RequestMapping("manage")
 @Controller
 public class ProductController {

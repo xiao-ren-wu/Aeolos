@@ -1,6 +1,7 @@
 package com.xrw.portal.service;
 
 import com.xrw.portal.pojo.po.Category;
+import com.xrw.portal.pojo.vo.CategoryShowVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 
 import java.util.List;
@@ -46,4 +47,11 @@ public interface CategoryService {
      * @return
      */
     ServerResponse<List<Category>> getChildrenParallelCategory(Integer parentId);
+
+    /**
+     * 树状展示商品类别
+     * @param categoryId
+     * @return
+     */
+    ServerResponse<List<CategoryShowVo>> treeShowCategory(Integer categoryId);
 }

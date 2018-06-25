@@ -3,14 +3,14 @@ package com.xrw.controller.portal;
 import com.xrw.common.utils.PropertiesUtil;
 import com.xrw.controller.utils.Check;
 import com.xrw.portal.pojo.po.Category;
+import com.xrw.portal.pojo.vo.CategoryShowVo;
 import com.xrw.portal.pojo.vo.CategoryVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
+import org.apache.ibatis.annotations.Param;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,12 +26,14 @@ import java.util.List;
  * @JdkVersion: jdk1.8.0_101
  */
 @Controller
+@CrossOrigin
 @RequestMapping("/category")
 public class UserCategoryController {
     @Resource
     private CategoryService categoryService;
 
-    @GetMapping("/get_all_category")
+
+    @GetMapping("/get_category")
     @ResponseBody
     public ServerResponse<CategoryVo> getChildrenParallelCategory(
             @RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
@@ -41,5 +43,12 @@ public class UserCategoryController {
         categoryVo.setCategoryList(categoryList);
         categoryVo.setImgHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         return ServerResponse.createBySuccess(categoryVo);
+    }
+
+    @GetMapping("/tree_show_category")
+    @ResponseBody
+    public ServerResponse<List<CategoryShowVo>> treeShowCategory(
+            @RequestParam(value = "categoryId",defaultValue = "0")Integer categoryId){
+        return categoryService.treeShowCategory(categoryId);
     }
 }

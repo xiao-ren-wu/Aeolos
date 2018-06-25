@@ -9,10 +9,7 @@ import com.xrw.portal.service.CartService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -27,6 +24,7 @@ import javax.servlet.http.HttpSession;
  * @UpdateRemark: TODO
  * @JdkVersion: jdk1.8.0_101
  */
+@CrossOrigin
 @Controller
 @RequestMapping("/cart")
 public class CartController {
