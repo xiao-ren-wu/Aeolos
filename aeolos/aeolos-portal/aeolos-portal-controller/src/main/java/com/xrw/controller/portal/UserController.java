@@ -2,6 +2,7 @@ package com.xrw.controller.portal;
 
 import com.xrw.common.consts.Const;
 import com.xrw.common.enums.ResponseCode;
+import com.xrw.controller.utils.CookieUtil;
 import com.xrw.portal.pojo.po.User;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.UserService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @CreateBy IDEA
@@ -38,10 +41,13 @@ public class UserController {
      */
     @PostMapping("/login")
     @ResponseBody
-    public ServerResponse<User> login(String username, String password){
+    public ServerResponse<User> login(String username, String password, HttpServletResponse response){
         ServerResponse<User> login = userService.loginByShiro(username, password);
-        Session session = SecurityUtils.getSubject().getSession();
-        session.setAttribute(Const.CURRENT_USER,login.getData());
+        if(login.isSuccess()){
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setAttribute(Const.CURRENT_USER,login.getData());
+            //CookieUtil.writeLoginToken(response,session.getId().toString());
+        }
         return login;
     }
 
@@ -65,7 +71,11 @@ public class UserController {
     }
     @GetMapping("/get_user_info")
     @ResponseBody
-    public ServerResponse<User> getUserInfo(){
+    public ServerResponse<User> getUserInfo(HttpServletRequest request){
+//        String loginToken = CookieUtil.readLoginToken(request);
+//        if(null==loginToken){
+//            return ServerResponse.createByErrorMessage("用户未登录，无法获取用户当前信息");
+//        }
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user!=null) {

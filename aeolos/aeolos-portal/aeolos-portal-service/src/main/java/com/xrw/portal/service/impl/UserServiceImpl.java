@@ -31,7 +31,7 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
     @Resource
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public ServerResponse<User> login(String username, String password) {
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
             Session session = SecurityUtils.getSubject().getSession();
             session.setAttribute(CacheCode.TOKEN_FREFIX.getMsg()+username,forgetToker);
             //超时时间为10分钟
-            session.setTimeout(600000);
+            session.setTimeout(600);
             return ServerResponse.createBySuccess(forgetToker);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");

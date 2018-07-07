@@ -79,8 +79,6 @@ public class CartServiceImpl implements CartService {
         cart.setUserId(userId);
         cartMapper.updateByPrimaryKeySelective(cart);
         return this.list(userId);
-
-
     }
 
     @Override

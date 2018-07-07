@@ -1,14 +1,11 @@
 package com.xrw.controller.portal;
 
 import com.xrw.common.utils.PropertiesUtil;
-import com.xrw.controller.utils.Check;
 import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.vo.CategoryShowVo;
 import com.xrw.portal.pojo.vo.CategoryVo;
 import com.xrw.portal.pojo.vo.ServerResponse;
 import com.xrw.portal.service.CategoryService;
-import org.apache.ibatis.annotations.Param;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

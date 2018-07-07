@@ -3,11 +3,13 @@ package com.xrw.portal.session;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.io.Serializable;
 
 /**
@@ -23,6 +25,7 @@ import java.io.Serializable;
 
 @Component
 public class CustomSessionManager extends DefaultWebSessionManager {
+
     @Override
     protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
 

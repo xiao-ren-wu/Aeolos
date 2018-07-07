@@ -29,6 +29,16 @@
         </property>
     </bean>
 
+    <!-- 设置Cookie名字, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
+当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <property name="name" value="freeway.session.id"/>
+        <property name="domain" value=".aeolos.com"/>
+        <property name="path" value=""/>
+        <property name="maxAge" value="3600"/>
+        <property name="httpOnly" value="false"/>
+    </bean>
+
 
     <!--创建SecurityManager-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -56,6 +66,7 @@
     <!--创建自定义的sessionManager-->
     <bean class="com.xrw.portal.session.CustomSessionManager" id="customSessionManager">
         <property name="sessionDAO" ref="redisSessionDao"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
 
     <!--<bean class="org.apache.shiro.session.mgt.DefaultSessionManager" id="sessionManager">-->

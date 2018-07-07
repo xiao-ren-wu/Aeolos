@@ -31,7 +31,6 @@ public class CategoryController {
     /**
      * 获取品类子节点
      * @param parentId 父类id
-     * @return
      */
     @GetMapping("/get_category")
     @ResponseBody
@@ -39,7 +38,7 @@ public class CategoryController {
     public ServerResponse<List<Category>> getCategory(
             @RequestParam(value = "categoryId", defaultValue = "0") Integer parentId) {
         if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
         //使用shiro进行权限验证
         if(!Check.checkRole()){
@@ -54,7 +53,7 @@ public class CategoryController {
     ){
 
         if(Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
         //使用shiro进行权限验证
         if(!Check.checkRole()){
@@ -66,7 +65,7 @@ public class CategoryController {
     @ResponseBody
     public ServerResponse<String> setCategory(@RequestParam("categoryId")Integer categoryId,@RequestParam("categoryName")String categoryName){
         if(Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
         //使用shiro进行权限验证
         if(!Check.checkRole()){
@@ -79,7 +78,7 @@ public class CategoryController {
     public ServerResponse<List<Category>> getChildrenParallelCategory(
             @RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
         if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录，赶紧登录去");
+            return ServerResponse.createByErrorMessage("用户未登录");
         }
         //使用shiro进行权限验证
         if(!Check.checkRole()){

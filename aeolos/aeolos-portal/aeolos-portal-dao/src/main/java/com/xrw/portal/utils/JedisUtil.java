@@ -1,5 +1,6 @@
 package com.xrw.portal.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @UpdateRemark: TODO
  * @JdkVersion: jdk1.8.0_101
  */
-
+@Slf4j
 @Component
 public class JedisUtil {
     @Resource
@@ -27,50 +28,51 @@ public class JedisUtil {
         return jedisPool.getResource();
     }
     public byte[] set(byte[] key, byte[] value) {
-        Jedis jedis=getResource();
-        try {
-            jedis.set(key,value);
+        try (Jedis jedis = getResource()) {
+            jedis.set(key, value);
             return value;
-        } finally {
-            jedis.close();
         }
     }
 
+    /**
+     * 在添加键值对的时候设置他的有效期
+     * @param key
+     * @param value
+     * @param exTime
+     * @return
+     */
+    public String setEx(String key,String value,int exTime){
+        try (Jedis jedis = getResource()) {
+            return jedis.setex(key, exTime, value);
+        }
+    }
+
+    /**
+     * 设置key的有效期
+     * @param key
+     * @param i 单位是秒
+     */
     public void expire(byte[] key, int i) {
-        Jedis jedis=getResource();
-        try {
-            jedis.expire(key,i);
-        } finally {
-            jedis.close();
+        try (Jedis jedis = getResource()) {
+            jedis.expire(key, i);
         }
     }
 
     public byte[] get(byte[] key) {
-        Jedis jedis=getResource();
-        try {
-            byte[] value = jedis.get(key);
-            return value;
-        } finally {
-            jedis.close();
+        try (Jedis jedis = getResource()) {
+            return jedis.get(key);
         }
     }
 
     public void del(byte[] key) {
-        Jedis jedis=getResource();
-        try {
+        try (Jedis jedis = getResource()) {
             jedis.del(key);
-        } finally {
-            jedis.close();
         }
     }
 
-    public Set<byte[]> keys(String shiro_session_prefix) {
-        Jedis jedis=getResource();
-        try {
-            Set<byte[]> keys = jedis.keys((shiro_session_prefix + "*").getBytes());
-            return keys;
-        } finally {
-            jedis.close();
+    public Set<byte[]> keys(String shiroSessionPrefix) {
+        try (Jedis jedis = getResource()) {
+            return jedis.keys((shiroSessionPrefix + "*").getBytes());
         }
     }
 

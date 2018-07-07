@@ -13,7 +13,13 @@
         <constructor-arg index="1" value="${redis.host}" type="java.lang.String" />
         <constructor-arg index="2" value="${redis.port}" type="int"/>
     </bean>
-    <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig"/>
+    <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig">
+        <property name="testOnBorrow" value="${redis.test.borrow}"/>
+        <property name="maxTotal" value="${redis.max.total}"/>
+        <property name="minIdle" value="${redis.min.idle}"/>
+        <property name="maxIdle" value="${redis.max.idle}"/>
+        <property name="testOnReturn" value="${redis.test.return}"/>
+    </bean>
     <context:component-scan base-package="com.xrw.portal"/>
 
 </beans>

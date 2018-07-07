@@ -60,6 +60,10 @@
             <artifactId>commons-net</artifactId>
             <version>3.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
 
     </dependencies>
 

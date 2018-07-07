@@ -1,5 +1,6 @@
 package com.xrw.common.enums;
 
+
 /**
  * @CreateBy IDEA
  * @Description: TODO
@@ -20,7 +21,6 @@ public enum ResponseCode {
 
     private final int code;
     private final String desc;
-
 
     ResponseCode(int code,String desc){
         this.code = code;
