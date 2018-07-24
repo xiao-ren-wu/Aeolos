@@ -1,6 +1,14 @@
 package com.xrw.portal.service.impl;
 
+import com.alipay.api.AlipayResponse;
+import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
+import com.alipay.demo.trade.model.GoodsDetail;
+import com.alipay.demo.trade.model.builder.AlipayTradePrecreateRequestBuilder;
+import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
+import com.alipay.demo.trade.service.AlipayTradeService;
+import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
 import com.google.common.collect.Lists;
 import com.xrw.common.consts.Const;
@@ -10,43 +18,21 @@ import com.xrw.common.utils.FTPUtil;
 import com.xrw.common.utils.PropertiesUtil;
 import com.xrw.portal.dao.*;
 import com.xrw.portal.pojo.po.*;
-import com.xrw.portal.pojo.po.Product;
 import com.xrw.portal.pojo.vo.*;
 import com.xrw.portal.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import com.alipay.api.AlipayResponse;
-import com.alipay.api.domain.TradeFundBill;
-import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.alipay.api.response.MonitorHeartbeatSynResponse;
-import com.alipay.demo.trade.config.Configs;
-import com.alipay.demo.trade.model.ExtendParams;
-import com.alipay.demo.trade.model.GoodsDetail;
-import com.alipay.demo.trade.model.builder.*;
-import com.alipay.demo.trade.model.hb.*;
-import com.alipay.demo.trade.model.result.AlipayF2FPayResult;
-import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
-import com.alipay.demo.trade.model.result.AlipayF2FQueryResult;
-import com.alipay.demo.trade.model.result.AlipayF2FRefundResult;
-import com.alipay.demo.trade.service.AlipayMonitorService;
-import com.alipay.demo.trade.service.AlipayTradeService;
-import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
-import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
-import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import com.alipay.demo.trade.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @CreateBy IDEA

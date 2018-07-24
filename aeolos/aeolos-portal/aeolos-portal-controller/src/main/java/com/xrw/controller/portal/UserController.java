@@ -41,12 +41,11 @@ public class UserController {
      */
     @PostMapping("/login")
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpServletResponse response){
+    public ServerResponse<User> login(String username, String password){
         ServerResponse<User> login = userService.loginByShiro(username, password);
         if(login.isSuccess()){
             Session session = SecurityUtils.getSubject().getSession();
             session.setAttribute(Const.CURRENT_USER,login.getData());
-            //CookieUtil.writeLoginToken(response,session.getId().toString());
         }
         return login;
     }

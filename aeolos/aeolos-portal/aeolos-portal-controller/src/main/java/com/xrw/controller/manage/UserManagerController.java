@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  * @JdkVersion: jdk1.8.0_101
  */
 @CrossOrigin
-@RequestMapping("/admin")
+@RequestMapping("/manage")
 @Controller
 public class UserManagerController {
     @Resource
