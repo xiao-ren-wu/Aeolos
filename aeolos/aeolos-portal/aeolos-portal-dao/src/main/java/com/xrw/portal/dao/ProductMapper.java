@@ -68,4 +68,11 @@ public interface ProductMapper {
      * @return
      */
     Product selectByCategoryId(Integer categoryId);
+
+    /**
+     * 通过订单id查询商品库存
+     * @param productId 商品id
+     * @return 商品库存
+     */
+    Integer selectStockByProductId(@Param("productId") Integer productId);
 }

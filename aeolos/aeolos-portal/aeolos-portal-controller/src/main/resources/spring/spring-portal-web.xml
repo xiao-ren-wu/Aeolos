@@ -64,9 +64,16 @@
 
     <!--springMVC拦截器-->
     <mvc:interceptors>
+        <!--如果直接在interceptors中直接定义bean那么所有的请求都会被他拦截-->
+        <!--<bean></bean>-->
         <mvc:interceptor>
+            <!--manage/a    /manage/*-->
+            <!--manage/b    /manage/*-->
+            <!--manage/order/detail /manage/**-->
             <!--可以拦截manage下的所有url-->
             <mvc:mapping path="/manage/**"/>
+            <!--给不用拦截的URL放行-->
+            <mvc:exclude-mapping path="/manage/login"/>
             <bean class="com.xrw.controller.interceptors.AuthorityInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

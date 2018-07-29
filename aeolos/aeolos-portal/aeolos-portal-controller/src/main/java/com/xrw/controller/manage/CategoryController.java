@@ -1,6 +1,5 @@
 package com.xrw.controller.manage;
 
-import com.xrw.controller.utils.Check;
 import com.xrw.portal.aop.AdminOnly;
 import com.xrw.portal.pojo.po.Category;
 import com.xrw.portal.pojo.vo.ServerResponse;
@@ -37,13 +36,6 @@ public class CategoryController {
     @AdminOnly
     public ServerResponse<List<Category>> getCategory(
             @RequestParam(value = "categoryId", defaultValue = "0") Integer parentId) {
-        if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return categoryService.getCategory(parentId);
     }
     @PostMapping("add_category")
@@ -51,39 +43,17 @@ public class CategoryController {
     public ServerResponse<String> addCategory(
             @RequestParam(value = "parentId", defaultValue="0")Integer parentId,String categoryName
     ){
-
-        if(Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return categoryService.addCategory(parentId,categoryName);
     }
     @PostMapping("set_category")
     @ResponseBody
     public ServerResponse<String> setCategory(@RequestParam("categoryId")Integer categoryId,@RequestParam("categoryName")String categoryName){
-        if(Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return categoryService.setCategory(categoryId,categoryName);
     }
     @GetMapping("get_children_parallel_category")
     @ResponseBody
     public ServerResponse<List<Category>> getChildrenParallelCategory(
             @RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
-        if(!Check.checkLogin()){
-            return ServerResponse.createByErrorMessage("用户未登录");
-        }
-        //使用shiro进行权限验证
-        if(!Check.checkRole()){
-            return ServerResponse.createByErrorMessage("不是管理员没有权限登录");
-        }
         return categoryService.getChildrenParallelCategory(categoryId);
     }
 

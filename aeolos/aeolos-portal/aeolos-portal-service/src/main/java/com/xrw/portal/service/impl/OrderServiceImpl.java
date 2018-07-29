@@ -21,18 +21,18 @@ import com.xrw.portal.pojo.po.*;
 import com.xrw.portal.pojo.vo.*;
 import com.xrw.portal.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 /**
  * @CreateBy IDEA
@@ -338,6 +338,34 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orderList = orderMapper.selectByUserId(userId);
         List<OrderVo> orderVoList = assembleOrderVoList(orderList,userId);
         return ServerResponse.createBySuccess(orderVoList);
+    }
+
+    @Override
+    public void closeOrder(int hour) {
+        Date closeDateTime = DateUtils.addHours(new Date(),-hour);
+        List<Order> orderList = orderMapper.selectOrderStatusByCreateTime(Const.OrderStatusEnum.NO_PAY.getCode(), DateTimeUtil.dateToStr(closeDateTime));
+
+        for(Order order:orderList){
+            //通过订单id查询订单详情，一个订单包含多个商品
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            //遍历订单详情，还原库存
+            for (OrderItem orderItem :
+                    orderItemList) {
+                //一定要用主键做where条件，防止锁表，
+                //并且同时必须是InnoDB存储引擎
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+
+                //该商品存在的话，还原库存
+                if(stock!=null){
+                    Product product = new Product();
+                    product.setStock(stock+orderItem.getQuantity());
+                    product.setId(orderItem.getId());
+                    productMapper.updateByPrimaryKey(product);
+                }
+                orderMapper.closeOrderByOrderId(order.getId());
+            }
+            log.info("【关闭订单】OrderNo{}",order.getOrderNo());
+        }
     }
 
     private List<OrderVo> assembleOrderVoList(List<Order> orderList,Integer userId){

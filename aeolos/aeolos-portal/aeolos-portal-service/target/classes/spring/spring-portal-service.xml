@@ -2,7 +2,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -12,19 +12,23 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/jdbc
-        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- 扫描service包下的所有的使用注解的类型 -->
     <context:component-scan base-package="com.xrw.portal.service"/>
 
-    <!--&lt;!&ndash; 配置事务管理器 &ndash;&gt;-->
-    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-        <!--&lt;!&ndash; 注入数据库连接池 &ndash;&gt;-->
-        <!--<property name="dataSource" ref="dataSource"/>-->
-    <!--</bean>-->
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 注入数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-    <!-- 配置基于注解的声明式事务管理 -->
-    <!-- 默认使用注解来管理事务行为 -->
-    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
-    <!--<jdbc:embedded-database id="dataSource"/>-->
+     <!--配置基于注解的声明式事务管理 -->
+     <!--默认使用注解来管理事务行为 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <jdbc:embedded-database id="dataSource"/>
+    <!--开启spring定时任务-->
+    <task:annotation-driven/>
+
+
 </beans>

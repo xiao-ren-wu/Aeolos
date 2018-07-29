@@ -103,5 +103,10 @@
     from aeolos_product
     where category_id=#{categoryId}
   </select>
+    <select id="selectStockByProductId" resultType="java.lang.Integer" parameterType="Integer">
+      select stock
+      from aeolos_product
+      where id=#{productId}
+    </select>
 
 </mapper>

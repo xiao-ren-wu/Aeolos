@@ -50,6 +50,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="closeOrderByOrderId" parameterType="Integer">
+    UPDATE aeolos_order
+    SET status = 0
+    where id = #{id}
+  </update>
   <select id="selectByUserIdAndOrderNo" resultType="com.xrw.portal.pojo.po.Order" parameterType="map">
       select <include refid="Base_Column_List"/>
       from aeolos_order
@@ -65,6 +70,21 @@
       from aeolos_order
       where user_id=#{userId}
     </select>
+    <select id="selectOrderStatusByCreateTime" resultType="com.xrw.portal.pojo.po.Order" parameterType="map">
+      SELECT <include refid="Base_Column_List"/>
+      from aeolos_order
+      where status=#{status}
+      <![CDATA[
+      and create_time <= #{date}
+      ]]>
+      order by create_time desc
+    </select>
+  <select id="selectStockByProductId" resultType="java.lang.Integer">
+    select stock
+    from aeolos_order
+    where id = #{id}
+    for update
+  </select>
 
 
 </mapper>

@@ -33,11 +33,10 @@ public class Check {
     }
 
     /**
-     * 检查用户是否登录,登录返回true,没有登录返回false
-     * @return
+     * 检查用户是否登录,
+     * @return 登录返回true,没有登录返回false
      */
     public  static boolean checkLogin(){
-        //从session中获取当前用户信息，判断该用户是否是管理员身份
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         return null != user;

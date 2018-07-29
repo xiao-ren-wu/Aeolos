@@ -36,7 +36,7 @@ public interface OrderService {
     ServerResponse callback(Map<String,String> requestParams);
 
     /**
-     * 产看订单状态
+     * 查看订单状态
      * @param id
      * @param orderNo
      * @return
@@ -80,4 +80,11 @@ public interface OrderService {
      * @return
      */
     ServerResponse<List<OrderVo>> list(Integer userId);
+
+    /**
+     * 关闭订单,未付款状态
+     * @param hour 对指定时间内没有付款的订单进行关闭
+     */
+    void closeOrder(int hour);
+
 }

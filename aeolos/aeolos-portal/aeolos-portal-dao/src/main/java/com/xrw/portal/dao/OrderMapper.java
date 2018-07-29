@@ -46,4 +46,28 @@ public interface OrderMapper {
      * @return
      */
     List<Order> selectByUserId(Integer userId);
+
+    /**
+     * 关闭订单
+     * @param status 订单状态
+     * @param date 订单日期
+     * @return
+     */
+    List<Order> selectOrderStatusByCreateTime(@Param("status") Integer status,
+                                              @Param("date") String date);
+
+    /**
+     * 通过商品id查询商品库存，这里一定要使用Integer,因为int无法为null
+     * 考虑到很多商品已经删除的情况
+     * 使用到了悲观锁
+     * @param id 商品id
+     * @return 商品库存，如果商品不存在，返回null
+     */
+    Integer selectStockByProductId(@Param("id") Integer id);
+
+    /**
+     * 通过订单id关闭订单，更改订单状态
+     * @param id 订单id
+     */
+    void closeOrderByOrderId(@Param("id") Integer id);
 }

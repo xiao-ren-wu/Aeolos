@@ -59,7 +59,24 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10485760"/> <!-- 10m -->
         <property name="maxInMemorySize" value="4096" />
-        <property name="defaultEncoding" value="UTF-8"></property>
+        <property name="defaultEncoding" value="UTF-8"/>
     </bean>
+
+    <!--springMVC拦截器-->
+    <mvc:interceptors>
+        <!--如果直接在interceptors中直接定义bean那么所有的请求都会被他拦截-->
+        <!--<bean></bean>-->
+        <mvc:interceptor>
+            <!--manage/a    /manage/*-->
+            <!--manage/b    /manage/*-->
+            <!--manage/order/detail /manage/**-->
+            <!--可以拦截manage下的所有url-->
+            <mvc:mapping path="/manage/**"/>
+            <!--给不用拦截的URL放行-->
+            <mvc:exclude-mapping path="/manage/login"/>
+            <bean class="com.xrw.controller.interceptors.AuthorityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 
 </beans>
