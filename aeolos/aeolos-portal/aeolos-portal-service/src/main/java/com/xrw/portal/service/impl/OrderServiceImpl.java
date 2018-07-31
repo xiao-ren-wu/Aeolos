@@ -462,7 +462,6 @@ public class OrderServiceImpl implements OrderService {
      * @param orderItemList 订单详情列表
      */
     private void reduceProductStock(List<OrderItem> orderItemList){
-        System.out.println("减少库存===================================================");
         for(OrderItem orderItem:orderItemList){
             Integer productId = orderItem.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);

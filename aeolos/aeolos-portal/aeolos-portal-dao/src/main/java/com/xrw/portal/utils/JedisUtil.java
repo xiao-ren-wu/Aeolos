@@ -76,4 +76,22 @@ public class JedisUtil {
         }
     }
 
+    /**
+     * 分布式锁
+     * @param key 分布式锁名称
+     * @param value 锁的过期时间
+     * @return 获取成功并设置值返回1，否则返回0
+     */
+    public Long setnx(String key,String value){
+        try (Jedis jedis = getResource()) {
+            return jedis.setnx(key,value);
+        }
+    }
+
+    public String getSet(String key,String value){
+        try (Jedis jedis = getResource()) {
+            return jedis.getSet(key,value);
+        }
+    }
+
 }
